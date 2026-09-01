@@ -16,7 +16,7 @@ export function createApp(): express.Express {
 
     app.use(
         cors({
-            origin: "http://localhost:3000",
+            origin: env.app.frontendUrl,
             credentials: true,
         })
     );

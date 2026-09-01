@@ -53,6 +53,7 @@ class Env {
         env: this.getString("NODE_ENV", "development"),
         debug: this.getBoolean("DEBUG", false),
         apiPrefix: this.getString("API_V1_PREFIX", "/api/v1"),
+        frontendUrl: this.getString("FRONTEND_URL"),
     };
 
     readonly server = {
