@@ -40,7 +40,7 @@ export class UserController {
         res.cookie("sessionId", result.sessionId, {
             httpOnly: true,
             secure: env.session.secure,
-            sameSite: "lax",
+            sameSite: "none",
             maxAge:
                 env.auth.session.ttlSeconds * 1000,
             path: "/",
@@ -55,7 +55,7 @@ export class UserController {
         res.clearCookie("guestId", {
             httpOnly: true,
             secure: env.session.secure,
-            sameSite: "lax",
+            sameSite: "none",
             path: "/",
         });
 

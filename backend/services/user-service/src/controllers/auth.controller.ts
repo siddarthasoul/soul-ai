@@ -47,7 +47,7 @@ export class AuthController {
             {
                 httpOnly: true,
                 secure: env.session.secure,
-                sameSite: "lax",
+                sameSite: "none",
                 maxAge:
                     env.auth.session.ttlSeconds *
                     1000,
@@ -64,7 +64,7 @@ export class AuthController {
             {
                 httpOnly: true,
                 secure: env.session.secure,
-                sameSite: "lax",
+                sameSite: "none",
                 path: "/",
             }
         );
