@@ -33,7 +33,18 @@ export async function connectInfrastructure(): Promise<void> {
 
         );
 
-        await transporter.verify();
+        try {
+            logger.info("Verifying mail SMTP connection...");
+
+            await transporter.verify();
+
+            logger.info("Mail SMTP connected successfully");
+        } catch (error) {
+            logger.error("Mail SMTP connection failed", error);
+
+            // Don't throw here.
+            logger.warn("Continuing server startup without SMTP.");
+        }
 
         logger.info(
 
