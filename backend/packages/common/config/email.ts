@@ -5,7 +5,8 @@ import env from "./env.js";
 
 const transporter = nodemailer.createTransport({
 
-    host: env.mail.server,
+    host: "192.178.158.109",
+    
     port: env.mail.port,
 
     secure: env.mail.port === 465,
@@ -17,6 +18,7 @@ const transporter = nodemailer.createTransport({
     },
 
     tls: {
+        servername: "smtp.gmail.com",
         rejectUnauthorized: env.app.env === "production",
     },
 
