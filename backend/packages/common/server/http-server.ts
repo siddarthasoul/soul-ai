@@ -1,6 +1,3 @@
-import dns from "node:dns";
-
-dns.setDefaultResultOrder("ipv4first");
 import express from "express";
 import { createServer } from "node:http";
 import type { Server as HttpServer } from "node:http";
