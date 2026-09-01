@@ -87,14 +87,9 @@ class Env {
     };
 
     readonly mail = {
-        username: this.getString("MAIL_USERNAME"),
-        password: this.getString("MAIL_PASSWORD"),
-        from: this.getString("MAIL_FROM"),
-        fromName: this.getString("MAIL_FROM_NAME"),
-        server: this.getString("MAIL_SERVER"),
-        port: this.getNumber("MAIL_PORT", 587),
-        startTLS: this.getBoolean("MAIL_STARTTLS"),
-        sslTLS: this.getBoolean("MAIL_SSL_TLS"),
+        apiKey: this.require("BREVO_API_KEY"),
+        from: this.require("MAIL_FROM"),
+        fromName: this.getString("MAIL_FROM_NAME", "SOUL AI"),
     };
 
 

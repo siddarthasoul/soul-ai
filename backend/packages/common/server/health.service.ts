@@ -2,7 +2,7 @@ import mongoDatabase from "../config/mongo.database.js";
 
 import redis from "../config/redis.js";
 
-import transporter from "../config/email.js";
+import env from "../config/env.js";
 
 export interface HealthComponent {
 
@@ -221,46 +221,32 @@ class HealthService {
     }
 
     private async checkMail(): Promise<HealthComponent> {
-
-        const start =
-
-            Date.now();
+        const start = Date.now();
 
         try {
-
-            await transporter.verify();
+            if (!env.mail.apiKey) {
+                return {
+                    status: "down",
+                    latencyMs: Date.now() - start,
+                    error: "BREVO_API_KEY is not configured",
+                };
+            }
 
             return {
-
                 status: "up",
-
-                latencyMs:
-
-                    Date.now() - start,
-
+                latencyMs: Date.now() - start,
             };
-
         } catch (error) {
-
             return {
-
                 status: "down",
-
-                latencyMs:
-
-                    Date.now() - start,
-
+                latencyMs: Date.now() - start,
                 error:
-
                     error instanceof Error
-
                         ? error.message
-
-                        : "Mail SMTP health check failed",
-
+                        : "Mail health check failed",
             };
-
         }
+
 
     }
 

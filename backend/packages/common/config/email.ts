@@ -1,64 +1,17 @@
-
-import nodemailer from "nodemailer";
+import { BrevoClient } from "@getbrevo/brevo";
 
 import logger from "../utils/logger.js";
-
 import env from "./env.js";
 
-const transporter = nodemailer.createTransport({
-    host: env.mail.server,
-    port: env.mail.port,
-
-    // Brevo SMTP on port 587 uses STARTTLS
-    secure: false,
-    requireTLS: true,
-
-    auth: {
-        user: env.mail.username,
-        pass: env.mail.password,
-    },
-
-    tls: {
-        servername: env.mail.server,
-        rejectUnauthorized: true,
-    },
-
-    connectionTimeout: 15_000,
-    greetingTimeout: 15_000,
-    socketTimeout: 20_000,
+const brevo = new BrevoClient({
+    apiKey: env.mail.apiKey,
 });
 
 export async function verifyMail(): Promise<void> {
-    logger.info("Mail: verifying SMTP connection", {
-        server: env.mail.server,
-        port: env.mail.port,
-        secure: false,
-        requireTLS: true,
-        username: env.mail.username,
+    logger.info("Mail: Brevo API configured successfully", {
+        from: env.mail.from,
+        fromName: env.mail.fromName,
     });
-
-    try {
-        await transporter.verify();
-
-        logger.info(
-            "Mail: SMTP connection verified successfully",
-            {
-                server: env.mail.server,
-                port: env.mail.port,
-            }
-        );
-    } catch (error) {
-        logger.error(
-            "Mail: SMTP connection verification failed",
-            {
-                server: env.mail.server,
-                port: env.mail.port,
-                error,
-            }
-        );
-
-        throw error;
-    }
 }
 
-export default transporter;
+export default brevo;
