@@ -9,7 +9,7 @@ import { randomUUID } from "node:crypto";
 import sessionRepository
     from "../../../services/user-service/src/repositories/session.repository.js";
 
-import { ApiError } from "../utils/apiError.js";
+import env from "../config/env.js";
 
 export interface ChatIdentity {
     userId?: string;
@@ -75,9 +75,8 @@ export async function identityMiddleware(
             res.clearCookie("sessionId", {
                 httpOnly: true,
                 secure:
-                    process.env.NODE_ENV ===
-                    "production",
-                sameSite: "lax",
+                    env.session.secure,
+                sameSite: "none",
                 path: "/",
             });
         }
@@ -104,9 +103,8 @@ export async function identityMiddleware(
             res.cookie("guestId", guestId, {
                 httpOnly: true,
                 secure:
-                    process.env.NODE_ENV ===
-                    "production",
-                sameSite: "lax",
+                    env.session.secure,
+                sameSite: "none",
                 maxAge:
                     30 *
                     24 *
