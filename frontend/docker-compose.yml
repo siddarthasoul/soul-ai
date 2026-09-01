@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+
+    container_name: soul-frontend
+
+    ports:
+      - "3000:3000"
+
+    restart: unless-stopped
