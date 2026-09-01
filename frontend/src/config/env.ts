@@ -20,12 +20,11 @@ const getEnv = (
 const env = {
     apiUrl: getEnv(
         "NEXT_PUBLIC_API_URL",
-        "http://localhost"
+
     ),
 
     socketUrl: getEnv(
         "NEXT_PUBLIC_SOCKET_URL",
-        "http://localhost"
     ),
 } as const;
 
