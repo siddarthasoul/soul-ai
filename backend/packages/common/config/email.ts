@@ -1,16 +1,17 @@
+
 import nodemailer from "nodemailer";
 
 import logger from "../utils/logger.js";
+
 import env from "./env.js";
 
 const transporter = nodemailer.createTransport({
-
-    host: "192.178.158.109",
-    
+    host: env.mail.server,
     port: env.mail.port,
 
-    secure: env.mail.port === 465,
-    requireTLS: env.mail.port === 587,
+    // Brevo SMTP on port 587 uses STARTTLS
+    secure: false,
+    requireTLS: true,
 
     auth: {
         user: env.mail.username,
@@ -18,8 +19,8 @@ const transporter = nodemailer.createTransport({
     },
 
     tls: {
-        servername: "smtp.gmail.com",
-        rejectUnauthorized: env.app.env === "production",
+        servername: env.mail.server,
+        rejectUnauthorized: true,
     },
 
     connectionTimeout: 15_000,
@@ -27,23 +28,34 @@ const transporter = nodemailer.createTransport({
     socketTimeout: 20_000,
 });
 
-
 export async function verifyMail(): Promise<void> {
     logger.info("Mail: verifying SMTP connection", {
         server: env.mail.server,
         port: env.mail.port,
-        secure: env.mail.port === 465,
-        requireTLS: env.mail.port === 587,
+        secure: false,
+        requireTLS: true,
+        username: env.mail.username,
     });
 
     try {
         await transporter.verify();
 
-        logger.info("Mail: SMTP connection verified successfully");
+        logger.info(
+            "Mail: SMTP connection verified successfully",
+            {
+                server: env.mail.server,
+                port: env.mail.port,
+            }
+        );
     } catch (error) {
-        logger.error("Mail: SMTP connection verification failed", {
-            error,
-        });
+        logger.error(
+            "Mail: SMTP connection verification failed",
+            {
+                server: env.mail.server,
+                port: env.mail.port,
+                error,
+            }
+        );
 
         throw error;
     }

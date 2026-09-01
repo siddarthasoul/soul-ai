@@ -1,5 +1,8 @@
+
 import transporter from "../../../../packages/common/config/email.js";
+
 import env from "../../../../packages/common/config/env.js";
+
 import logger from "../../../../packages/common/utils/logger.js";
 
 export class EmailService {
@@ -31,12 +34,16 @@ If you did not request this verification, please ignore this email.
                 html: `
                     <div>
                         <h2>Verify your Soul AI account</h2>
+
                         <p>Your Soul AI verification OTP is:</p>
+
                         <h1>${otp}</h1>
+
                         <p>
                             This OTP will expire in
                             <strong>5 minutes</strong>.
                         </p>
+
                         <p>
                             If you did not request this verification,
                             you can safely ignore this email.
@@ -45,19 +52,31 @@ If you did not request this verification, please ignore this email.
                 `.trim(),
             });
 
-            logger.info("Mail: verification OTP sent successfully", {
-                to,
-                messageId: info.messageId,
-                response: info.response,
-                accepted: info.accepted,
-                rejected: info.rejected,
-            });
-
+            logger.info(
+                "Mail: verification OTP sent successfully",
+                {
+                    to,
+                    messageId: info.messageId,
+                    accepted: info.accepted,
+                    rejected: info.rejected,
+                    response: info.response,
+                }
+            );
         } catch (error) {
-            logger.error("Mail: failed to send verification OTP", {
-                to,
-                error,
-            });
+            logger.error(
+                "Mail: failed to send verification OTP",
+                {
+                    to,
+                    error:
+                        error instanceof Error
+                            ? {
+                                  name: error.name,
+                                  message: error.message,
+                                  stack: error.stack,
+                              }
+                            : error,
+                }
+            );
 
             throw error;
         }
