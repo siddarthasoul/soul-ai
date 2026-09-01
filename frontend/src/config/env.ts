@@ -1,31 +1,17 @@
-const getEnv = (
-    key: string,
-    fallback?: string
-): string => {
-    const value = process.env[key];
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
 
-    if (value) {
-        return value;
-    }
+if (!apiUrl) {
+    throw new Error("Missing environment variable: NEXT_PUBLIC_API_URL");
+}
 
-    if (fallback !== undefined) {
-        return fallback;
-    }
-
-    throw new Error(
-        `Missing environment variable: ${key}`
-    );
-};
+if (!socketUrl) {
+    throw new Error("Missing environment variable: NEXT_PUBLIC_SOCKET_URL");
+}
 
 const env = {
-    apiUrl: getEnv(
-        "NEXT_PUBLIC_API_URL",
-
-    ),
-
-    socketUrl: getEnv(
-        "NEXT_PUBLIC_SOCKET_URL",
-    ),
+    apiUrl,
+    socketUrl,
 } as const;
 
 export default env;
