@@ -31,16 +31,12 @@ If you did not request this verification, please ignore this email.
                 html: `
                     <div>
                         <h2>Verify your Soul AI account</h2>
-
-                        <p>Your verification OTP is:</p>
-
+                        <p>Your Soul AI verification OTP is:</p>
                         <h1>${otp}</h1>
-
                         <p>
                             This OTP will expire in
                             <strong>5 minutes</strong>.
                         </p>
-
                         <p>
                             If you did not request this verification,
                             you can safely ignore this email.
@@ -53,12 +49,13 @@ If you did not request this verification, please ignore this email.
                 to,
                 messageId: info.messageId,
                 response: info.response,
+                accepted: info.accepted,
+                rejected: info.rejected,
             });
+
         } catch (error) {
             logger.error("Mail: failed to send verification OTP", {
                 to,
-                server: env.mail.server,
-                port: env.mail.port,
                 error,
             });
 
