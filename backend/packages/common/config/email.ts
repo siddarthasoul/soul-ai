@@ -18,6 +18,10 @@ const transporter = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: env.app.env === "production",
     },
+
+    connectionTimeout: 15_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 20_000,
 });
 
 export async function verifyMail(): Promise<void> {
@@ -27,6 +31,9 @@ export async function verifyMail(): Promise<void> {
         secure: env.mail.port === 465,
         requireTLS: env.mail.port === 587,
         username: env.mail.username,
+        connectionTimeout: 15_000,
+        greetingTimeout: 15_000,
+        socketTimeout: 20_000,
     });
 
     try {
