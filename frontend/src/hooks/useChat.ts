@@ -71,11 +71,6 @@ export function useChat() {
                 state.setConversations
         );
 
-    const addConversation =
-        useChatStore(
-            (state) =>
-                state.addConversation
-        );
 
     const setActiveConversation =
         useChatStore(

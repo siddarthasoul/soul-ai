@@ -5,7 +5,6 @@ import {
     useEffect,
     useState,
 } from "react";
-import chatService from "@/src/services/chat.service";
 
 import { useRouter } from "next/navigation";
 
@@ -40,7 +39,6 @@ export default function ChatPage({
         conversations,
         messages,
         sendMessage,
-        createConversation,
         loadConversations,
         loadConversationMessages,
         isLoadingConversations,
@@ -200,11 +198,6 @@ export default function ChatPage({
             handleConnectError
         );
 
-        // Socket may already be connected.
-        if (socket.connected) {
-            setIsConnected(true);
-        }
-
         return () => {
             socket.off(
                 "connect",
@@ -221,9 +214,7 @@ export default function ChatPage({
                 handleConnectError
             );
         };
-    }, [
-        connect,
-    ]);
+    }, [connect]);
 
     // ============================================================
     // JOIN CURRENT CONVERSATION
@@ -399,146 +390,106 @@ export default function ChatPage({
     // ============================================================
 
     return (
-        <main
-            className="
-                relative
-                flex
-                h-dvh
-                w-full
-                overflow-hidden
-                bg-black
-                text-white
-            "
-        >
+        <main className="relative flex h-[100dvh] w-full min-w-0 overflow-hidden bg-black text-white">
             <SoulBackground />
 
-            {/* ====================================================
-                HISTORY
-            ==================================================== */}
+            {/* ============================================================
+            HISTORY
+        ============================================================ */}
 
             <ChatHistory
                 conversations={conversations}
-                activeConversationId={
-                    conversationId
-                }
-                isLoading={
-                    isLoadingConversations
-                }
-                onNewChat={
-                    openNewConversation
-                }
+                activeConversationId={conversationId}
+                isLoading={isLoadingConversations}
+                onNewChat={openNewConversation}
             />
 
-            {/* ====================================================
-                CHAT AREA
-            ==================================================== */}
+            {/* ============================================================
+            CHAT AREA
 
-            <section
-                className="
-                    relative
-                    z-10
-                    flex
-                    min-w-0
-                    flex-1
-                    flex-col
-                "
-            >
-                <ChatStatus
-                    online={online}
-                    isStreaming={isStreaming}
-                    text={statusText}
-                />
+            IMPORTANT:
+            min-h-0 + overflow-hidden prevents the flex child from
+            increasing the height of the whole page.
+        ============================================================ */}
+
+            <section className="relative z-10 flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                {/* STATUS */}
+
+                <div className="shrink-0">
+                    <ChatStatus
+                        online={online}
+                        isStreaming={isStreaming}
+                        text={statusText}
+                    />
+                </div>
+
+                {/* ========================================================
+                MESSAGES
+
+                This is the ONLY element that should scroll.
+            ======================================================== */}
 
                 <ChatMessages
                     messages={messages}
-                    streamingContent={
-                        streamingContent
-                    }
+                    streamingContent={streamingContent}
                     isStreaming={isStreaming}
-                    error={
-                        isRateLimited
-                            ? null
-                            : error
-                    }
-                    onFeedback={
-                        messageFeedback
-                    }
+                    error={isRateLimited ? null : error}
+                    onFeedback={messageFeedback}
                 />
 
-                {/* ====================================================
-                    RATE LIMIT
-                ==================================================== */}
+                {/* ========================================================
+                RATE LIMIT ACTIONS
+            ======================================================== */}
 
                 {isRateLimited && (
-                    <div
-                        className="
-                            relative
-                            z-30
-                            flex
-                            w-full
-                            items-center
-                            justify-center
-                            gap-15
-                            px-4
-                            pb-8
-                            sm:gap-8
-                        "
-                    >
-                        <div className="shrink-0">
-                            <SoulActionBubble
-                                size="md"
-                                label="Sign in"
-                                description="Already use SOUL?"
-                                status="none"
-                                onClick={
-                                    openLogin
-                                }
-                            />
-                        </div>
+                    <div className="flex shrink-0 w-full items-center justify-center gap-4 px-4 pb-4 pt-2 sm:gap-8 sm:pb-6">
+                        <SoulActionBubble
+                            size="md"
+                            label="Sign in"
+                            description="Already use SOUL?"
+                            status="none"
+                            onClick={openLogin}
+                        />
 
-                        <div className="shrink-0">
-                            <SoulActionBubble
-                                size="md"
-                                label="Unlimited"
-                                description="Unlock unlimited chat"
-                                status="none"
-                                onClick={
-                                    openRegister
-                                }
-                            />
-                        </div>
+                        <SoulActionBubble
+                            size="md"
+                            label="Unlimited"
+                            description="Unlock unlimited chat"
+                            status="none"
+                            onClick={openRegister}
+                        />
                     </div>
                 )}
 
-                {/* ====================================================
-                    COMPOSER
-                ==================================================== */}
+                {/* ========================================================
+                COMPOSER
 
-                <ChatComposer
-                    value={message}
-                    onChange={setMessage}
-                    onSend={
-                        handleSendMessage
-                    }
-                    disabled={
-                        !online ||
-                        isStreaming ||
-                        isRateLimited ||
-                        isLoadingMessages
-                    }
-                    isStreaming={
-                        isStreaming
-                    }
-                    disabledReason={
-                        isRateLimited
-                            ? "rate-limited"
-                            : !isConnected
-                                ? "connecting"
-                                : !isJoined
-                                    ? "joining"
-                                    : undefined
-                    }
-                />
+                Composer stays at the bottom.
+            ======================================================== */}
+
+                <div className="shrink-0 w-full">
+                    <ChatComposer
+                        value={message}
+                        onChange={setMessage}
+                        onSend={handleSendMessage}
+                        disabled={
+                            !online ||
+                            isStreaming ||
+                            isRateLimited ||
+                            isLoadingMessages
+                        }
+                        isStreaming={isStreaming}
+                        disabledReason={
+                            isRateLimited
+                                ? "rate-limited"
+                                : !isConnected
+                                    ? "connecting"
+                                    : !isJoined
+                                        ? "joining"
+                                        : undefined
+                        }
+                    />
+                </div>
             </section>
         </main>
     );

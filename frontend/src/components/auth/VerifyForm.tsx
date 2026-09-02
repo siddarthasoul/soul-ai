@@ -119,7 +119,7 @@ export default function VerifyForm() {
              * HttpOnly cookie
              */
 
-            router.replace("/chat");
+            router.push("/");
         } catch (error) {
             setError(
                 error instanceof Error

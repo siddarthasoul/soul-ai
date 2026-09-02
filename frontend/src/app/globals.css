@@ -1,14 +1,201 @@
 @import "tailwindcss";
 
 /* =========================================================
-   SOUL — GLOBAL BACKGROUND
+   GLOBAL RESET
+   ========================================================= */
+
+:root {
+    color-scheme: dark;
+    --soul-bg: #000;
+    --soul-text: #fff;
+    --soul-cyan: 103, 232, 249;
+    --soul-purple: 168, 85, 247;
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+
+    overflow-x: hidden;
+
+    background: var(--soul-bg);
+
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    min-width: 0;
+    min-height: 100dvh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow-x: hidden;
+
+    background: var(--soul-bg);
+    color: var(--soul-text);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+textarea,
+input {
+    min-width: 0;
+}
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+::selection {
+    background: rgba(103, 232, 249, 0.20);
+}
+
+
+/* =========================================================
+   PAGE SYSTEM
+   ========================================================= */
+
+.soul-page {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 100dvh;
+
+    overflow-x: clip;
+
+    isolation: isolate;
+}
+
+/*
+ * Use this on the actual chat page wrapper.
+ *
+ * IMPORTANT:
+ * This prevents body/page scrolling.
+ * Only the message area should scroll.
+ */
+
+.soul-chat-page {
+    position: relative;
+
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    isolation: isolate;
+}
+
+.soul-chat-content {
+    position: relative;
+
+    flex: 1 1 auto;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+.soul-chat-scroll {
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior-y: contain;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+}
+
+.soul-chat-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================================
+   GENERIC SCROLL
+   ========================================================= */
+
+.soul-scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.soul-no-scroll {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   SAFE MOBILE AREA
+   ========================================================= */
+
+.soul-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.soul-safe-top {
+    padding-top: env(safe-area-inset-top);
+}
+
+
+/* =========================================================
+   BACKGROUND
    ========================================================= */
 
 .soul-background {
     position: fixed;
     inset: 0;
-    z-index: 0;
+
+    z-index: -1;
+
+    width: 100%;
+    height: 100dvh;
+
     overflow: hidden;
+
     pointer-events: none;
 
     background:
@@ -21,19 +208,31 @@
         );
 }
 
+
 /* =========================================================
    BACKGROUND ORBS
    ========================================================= */
 
-.soul-orb-main {
+.soul-orb-main,
+.soul-orb-one,
+.soul-orb-two {
     position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    will-change: transform;
+}
+
+.soul-orb-main {
     width: 520px;
     height: 520px;
+
     left: 50%;
     top: 45%;
 
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
+    transform: translate3d(-50%, -50%, 0);
 
     background:
         radial-gradient(
@@ -45,18 +244,15 @@
 
     filter: blur(35px);
 
-    animation:
-        soul-breathe 8s ease-in-out infinite;
+    animation: soul-breathe 8s ease-in-out infinite;
 }
 
 .soul-orb-one {
-    position: absolute;
     width: 300px;
     height: 300px;
+
     left: 5%;
     top: 15%;
-
-    border-radius: 50%;
 
     background:
         radial-gradient(
@@ -67,18 +263,15 @@
 
     filter: blur(70px);
 
-    animation:
-        soul-float-one 14s ease-in-out infinite;
+    animation: soul-float-one 14s ease-in-out infinite;
 }
 
 .soul-orb-two {
-    position: absolute;
     width: 350px;
     height: 350px;
+
     right: 0;
     bottom: 0;
-
-    border-radius: 50%;
 
     background:
         radial-gradient(
@@ -89,9 +282,9 @@
 
     filter: blur(80px);
 
-    animation:
-        soul-float-two 17s ease-in-out infinite;
+    animation: soul-float-two 17s ease-in-out infinite;
 }
+
 
 /* =========================================================
    COLOR FIELD
@@ -100,62 +293,62 @@
 .soul-color-field {
     position: absolute;
     inset: 0;
+
     overflow: hidden;
+
     pointer-events: none;
 }
 
 .soul-color {
     position: absolute;
+
     border-radius: 9999px;
+
+    pointer-events: none;
+
+    opacity: 0.15;
+
     filter: blur(100px);
-    opacity: 0.18;
+
     will-change: transform;
 }
 
 .soul-color-violet {
     width: 420px;
     height: 420px;
+
     left: 5%;
     top: 10%;
 
     background: #8b5cf6;
 
-    animation:
-        soul-color-violet
-        18s
-        ease-in-out
-        infinite;
+    animation: soul-color-violet 18s ease-in-out infinite;
 }
 
 .soul-color-cyan {
     width: 380px;
     height: 380px;
+
     right: 5%;
     top: 20%;
 
     background: #06b6d4;
 
-    animation:
-        soul-color-cyan
-        20s
-        ease-in-out
-        infinite;
+    animation: soul-color-cyan 20s ease-in-out infinite;
 }
 
 .soul-color-pink {
     width: 350px;
     height: 350px;
+
     left: 40%;
     bottom: -10%;
 
     background: #ec4899;
 
-    animation:
-        soul-color-pink
-        22s
-        ease-in-out
-        infinite;
+    animation: soul-color-pink 22s ease-in-out infinite;
 }
+
 
 /* =========================================================
    BACKGROUND LIGHTS
@@ -168,10 +361,14 @@
     height: 180px;
 
     border-radius: 50%;
-    filter: blur(70px);
 
     pointer-events: none;
-    opacity: 0.22;
+
+    opacity: 0.20;
+
+    filter: blur(70px);
+
+    will-change: transform;
 }
 
 .soul-background-light-one {
@@ -185,11 +382,7 @@
             transparent 70%
         );
 
-    animation:
-        soul-background-float-one
-        16s
-        ease-in-out
-        infinite;
+    animation: soul-background-float-one 16s ease-in-out infinite;
 }
 
 .soul-background-light-two {
@@ -203,11 +396,7 @@
             transparent 70%
         );
 
-    animation:
-        soul-background-float-two
-        19s
-        ease-in-out
-        infinite;
+    animation: soul-background-float-two 19s ease-in-out infinite;
 }
 
 .soul-background-light-three {
@@ -221,23 +410,21 @@
             transparent 70%
         );
 
-    animation:
-        soul-background-float-three
-        21s
-        ease-in-out
-        infinite;
+    animation: soul-background-float-three 21s ease-in-out infinite;
 }
 
+
 /* =========================================================
-   BACKGROUND GRID
+   GRID
    ========================================================= */
 
 .soul-grid {
     position: absolute;
-    inset: -50%;
+    inset: -40%;
 
     pointer-events: none;
-    opacity: 0.035;
+
+    opacity: 0.03;
 
     background-image:
         linear-gradient(
@@ -274,6 +461,7 @@
         );
 }
 
+
 /* =========================================================
    VIGNETTE
    ========================================================= */
@@ -281,6 +469,8 @@
 .soul-vignette {
     position: absolute;
     inset: 0;
+
+    pointer-events: none;
 
     background:
         radial-gradient(
@@ -290,6 +480,7 @@
         );
 }
 
+
 /* =========================================================
    STARS
    ========================================================= */
@@ -297,6 +488,8 @@
 .soul-stars {
     position: absolute;
     inset: 0;
+
+    pointer-events: none;
 }
 
 .soul-stars span {
@@ -309,147 +502,49 @@
 
     background: rgba(255, 255, 255, 0.45);
 
-    animation:
-        soul-twinkle
-        5s
-        ease-in-out
-        infinite;
+    animation: soul-twinkle 5s ease-in-out infinite;
+
+    will-change: transform, opacity;
 }
 
-.soul-stars span:nth-child(1) {
-    left: 18%;
-    top: 25%;
-}
+.soul-stars span:nth-child(1) { left: 18%; top: 25%; }
+.soul-stars span:nth-child(2) { left: 75%; top: 18%; animation-delay: 1s; }
+.soul-stars span:nth-child(3) { left: 85%; top: 62%; animation-delay: 2s; }
+.soul-stars span:nth-child(4) { left: 12%; top: 72%; animation-delay: 3s; }
+.soul-stars span:nth-child(5) { left: 42%; top: 12%; animation-delay: 1.5s; }
+.soul-stars span:nth-child(6) { left: 65%; top: 80%; animation-delay: 2.5s; }
+.soul-stars span:nth-child(7) { left: 32%; top: 85%; animation-delay: 4s; }
+.soul-stars span:nth-child(8) { left: 92%; top: 35%; animation-delay: 0.5s; }
+.soul-stars span:nth-child(9) { left: 25%; top: 42%; }
+.soul-stars span:nth-child(10) { left: 58%; top: 27%; }
+.soul-stars span:nth-child(11) { left: 88%; top: 78%; }
+.soul-stars span:nth-child(12) { left: 6%; top: 48%; }
+.soul-stars span:nth-child(13) { left: 48%; top: 68%; }
+.soul-stars span:nth-child(14) { left: 72%; top: 48%; }
+.soul-stars span:nth-child(15) { left: 36%; top: 30%; }
+.soul-stars span:nth-child(16) { left: 94%; top: 12%; }
+.soul-stars span:nth-child(17) { left: 22%; top: 90%; }
+.soul-stars span:nth-child(18) { left: 55%; top: 92%; }
+.soul-stars span:nth-child(19) { left: 81%; top: 42%; }
+.soul-stars span:nth-child(20) { left: 15%; top: 58%; }
+.soul-stars span:nth-child(21) { left: 68%; top: 10%; }
+.soul-stars span:nth-child(22) { left: 43%; top: 52%; }
+.soul-stars span:nth-child(23) { left: 90%; top: 90%; }
+.soul-stars span:nth-child(24) { left: 3%; top: 20%; }
 
-.soul-stars span:nth-child(2) {
-    left: 75%;
-    top: 18%;
-    animation-delay: 1s;
-}
-
-.soul-stars span:nth-child(3) {
-    left: 85%;
-    top: 62%;
-    animation-delay: 2s;
-}
-
-.soul-stars span:nth-child(4) {
-    left: 12%;
-    top: 72%;
-    animation-delay: 3s;
-}
-
-.soul-stars span:nth-child(5) {
-    left: 42%;
-    top: 12%;
-    animation-delay: 1.5s;
-}
-
-.soul-stars span:nth-child(6) {
-    left: 65%;
-    top: 80%;
-    animation-delay: 2.5s;
-}
-
-.soul-stars span:nth-child(7) {
-    left: 32%;
-    top: 85%;
-    animation-delay: 4s;
-}
-
-.soul-stars span:nth-child(8) {
-    left: 92%;
-    top: 35%;
-    animation-delay: 0.5s;
-}
-
-.soul-stars span:nth-child(9) {
-    left: 25%;
-    top: 42%;
-}
-
-.soul-stars span:nth-child(10) {
-    left: 58%;
-    top: 27%;
-}
-
-.soul-stars span:nth-child(11) {
-    left: 88%;
-    top: 78%;
-}
-
-.soul-stars span:nth-child(12) {
-    left: 6%;
-    top: 48%;
-}
-
-.soul-stars span:nth-child(13) {
-    left: 48%;
-    top: 68%;
-}
-
-.soul-stars span:nth-child(14) {
-    left: 72%;
-    top: 48%;
-}
-
-.soul-stars span:nth-child(15) {
-    left: 36%;
-    top: 30%;
-}
-
-.soul-stars span:nth-child(16) {
-    left: 94%;
-    top: 12%;
-}
-
-.soul-stars span:nth-child(17) {
-    left: 22%;
-    top: 90%;
-}
-
-.soul-stars span:nth-child(18) {
-    left: 55%;
-    top: 92%;
-}
-
-.soul-stars span:nth-child(19) {
-    left: 81%;
-    top: 42%;
-}
-
-.soul-stars span:nth-child(20) {
-    left: 15%;
-    top: 58%;
-}
-
-.soul-stars span:nth-child(21) {
-    left: 68%;
-    top: 10%;
-}
-
-.soul-stars span:nth-child(22) {
-    left: 43%;
-    top: 52%;
-}
-
-.soul-stars span:nth-child(23) {
-    left: 90%;
-    top: 90%;
-}
-
-.soul-stars span:nth-child(24) {
-    left: 3%;
-    top: 20%;
-}
 
 /* =========================================================
-   SOUL GLASS
+   GLASS
    ========================================================= */
 
 .soul-glass {
     position: relative;
+
+    isolation: isolate;
+
     overflow: hidden;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
 
     background:
         linear-gradient(
@@ -458,15 +553,8 @@
             rgba(255, 255, 255, 0.025)
         );
 
-    border: 1px solid rgba(255, 255, 255, 0.12);
-
-    backdrop-filter:
-        blur(28px)
-        saturate(150%);
-
-    -webkit-backdrop-filter:
-        blur(28px)
-        saturate(150%);
+    backdrop-filter: blur(28px) saturate(150%);
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -479,6 +567,8 @@
 
     position: absolute;
     inset: 0;
+
+    z-index: -1;
 
     pointer-events: none;
 
@@ -493,14 +583,14 @@
             rgba(180, 100, 255, 0.10),
             transparent 35%
         );
-
-    opacity: 0.8;
 }
 
 .soul-glass::after {
     content: "";
 
     position: absolute;
+
+    z-index: -1;
 
     width: 180%;
     height: 60%;
@@ -516,67 +606,13 @@
         linear-gradient(
             90deg,
             transparent,
-            rgba(255, 255, 255, 0.055),
+            rgba(255, 255, 255, 0.045),
             transparent
         );
 
-    animation:
-        soul-glass-shine
-        9s
-        ease-in-out
-        infinite;
+    animation: soul-glass-shine 11s ease-in-out infinite;
 }
 
-/* =========================================================
-   LIQUID GLOW
-   ========================================================= */
-
-.soul-liquid-glow {
-    position: absolute;
-
-    width: 420px;
-    height: 420px;
-
-    border-radius: 50%;
-
-    pointer-events: none;
-
-    filter: blur(80px);
-    opacity: 0.35;
-
-    animation:
-        soul-liquid-move
-        12s
-        ease-in-out
-        infinite;
-}
-
-.soul-liquid-blue {
-    background:
-        radial-gradient(
-            circle,
-            rgba(0, 180, 255, 0.28),
-            transparent 70%
-        );
-}
-
-.soul-liquid-purple {
-    background:
-        radial-gradient(
-            circle,
-            rgba(150, 70, 255, 0.25),
-            transparent 70%
-        );
-}
-
-.soul-liquid-pink {
-    background:
-        radial-gradient(
-            circle,
-            rgba(255, 70, 180, 0.18),
-            transparent 70%
-        );
-}
 
 /* =========================================================
    GLASS BUTTON
@@ -584,36 +620,30 @@
 
 .soul-glass-button {
     position: relative;
+
     overflow: hidden;
 
     border: 1px solid rgba(255, 255, 255, 0.14);
 
-    background:
-        rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.07);
 
-    backdrop-filter:
-        blur(20px)
-        saturate(150%);
-
-    -webkit-backdrop-filter:
-        blur(20px)
-        saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.14),
         0 10px 40px rgba(0, 0, 0, 0.30);
 
     transition:
-        transform 300ms ease,
-        background 300ms ease,
-        box-shadow 300ms ease;
+        transform 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease;
 }
 
 .soul-glass-button:hover {
     transform: translateY(-2px);
 
-    background:
-        rgba(255, 255, 255, 0.11);
+    background: rgba(255, 255, 255, 0.11);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.18),
@@ -624,34 +654,145 @@
     transform: scale(0.97);
 }
 
+
 /* =========================================================
-   SOUL BUTTON
+   HERO
    ========================================================= */
 
-.animate-soul-button {
-    animation:
-        soul-button-breathe
-        4s
-        ease-in-out
-        infinite;
+/*
+ * New Hero system:
+ *
+ * centered vertically on desktop
+ * slightly higher on mobile
+ * no accidental page overflow
+ */
+
+.soul-hero {
+    position: relative;
+
+    width: 100%;
+    min-height: 100dvh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    padding:
+        max(24px, env(safe-area-inset-top))
+        20px
+        max(32px, env(safe-area-inset-bottom));
+
+    isolation: isolate;
 }
 
-.animate-soul-button:hover {
-    animation-play-state: paused;
+.soul-hero-inner {
+    position: relative;
+
+    z-index: 10;
+
+    width: min(100%, 820px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
 }
+
+.soul-hero-logo {
+    margin-bottom: 18px;
+}
+
+.soul-hero-title {
+    max-width: 760px;
+
+    margin: 0;
+
+    font-size: clamp(2.2rem, 7vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+    font-weight: 600;
+
+    text-wrap: balance;
+}
+
+.soul-hero-subtitle {
+    max-width: 560px;
+
+    margin: 20px auto 0;
+
+    color: rgba(255, 255, 255, 0.45);
+
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    line-height: 1.7;
+
+    text-wrap: balance;
+}
+
+.soul-hero-composer {
+    width: min(100%, 680px);
+
+    margin-top: 34px;
+}
+
+.soul-hero-hint {
+    margin-top: 12px;
+
+    color: rgba(255, 255, 255, 0.20);
+
+    font-size: 11px;
+}
+
 
 /* =========================================================
-   SOUL LOGO
+   HERO → CHAT TRANSITION
+   ========================================================= */
+
+.soul-hero-exit {
+    animation: soul-hero-exit 450ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.soul-chat-enter {
+    animation: soul-chat-enter 450ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes soul-hero-exit {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0) scale(0.98);
+    }
+}
+
+@keyframes soul-chat-enter {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+
+/* =========================================================
+   LOGO
    ========================================================= */
 
 .soul-logo-breathe {
     position: relative;
 
-    animation:
-        soul-logo-breathe
-        5s
-        ease-in-out
-        infinite;
+    animation: soul-logo-breathe 5s ease-in-out infinite;
+
+    will-change: transform;
 }
 
 .soul-logo-breathe::after {
@@ -659,6 +800,8 @@
 
     position: absolute;
     inset: -35%;
+
+    z-index: -1;
 
     border-radius: 50%;
 
@@ -674,136 +817,78 @@
 
     filter: blur(12px);
 
-    animation:
-        soul-logo-orbit
-        10s
-        linear
-        infinite;
+    animation: soul-logo-orbit 12s linear infinite;
 }
 
+
 /* =========================================================
-   SOUL BUBBLE
+   BUBBLES
    ========================================================= */
 
 .soul-bubble {
     position: relative;
+
     perspective: 800px;
 }
 
 .soul-bubble-body {
-    animation:
-        soul-bubble-breathe
-        5s
-        ease-in-out
-        infinite;
+    animation: soul-bubble-breathe 5s ease-in-out infinite;
 }
 
 .soul-bubble-aura {
-    animation:
-        soul-aura-breathe
-        6s
-        ease-in-out
-        infinite;
+    animation: soul-aura-breathe 6s ease-in-out infinite;
 }
 
 .soul-bubble-liquid {
-    animation:
-        soul-liquid-blob
-        7s
-        ease-in-out
-        infinite;
+    animation: soul-liquid-blob 7s ease-in-out infinite;
 }
 
 .soul-bubble-liquid-reverse {
-    animation:
-        soul-liquid-blob-reverse
-        9s
-        ease-in-out
-        infinite;
+    animation: soul-liquid-blob-reverse 9s ease-in-out infinite;
 }
 
 .soul-bubble-pink {
-    animation:
-        soul-pink-float
-        8s
-        ease-in-out
-        infinite;
+    animation: soul-pink-float 8s ease-in-out infinite;
 }
 
 .soul-core {
-    animation:
-        soul-core-breathe
-        4s
-        ease-in-out
-        infinite;
+    animation: soul-core-breathe 4s ease-in-out infinite;
 }
 
 .soul-core-light {
-    animation:
-        soul-core-pulse
-        2.5s
-        ease-in-out
-        infinite;
+    animation: soul-core-pulse 2.5s ease-in-out infinite;
 }
 
 .soul-bubble-shine {
-    animation:
-        soul-bubble-shine
-        6s
-        ease-in-out
-        infinite;
+    animation: soul-bubble-shine 7s ease-in-out infinite;
 }
 
-/* =========================================================
-   BUBBLE CONSTELLATION
-   ========================================================= */
-
-.soul-bubble-float-1 {
-    animation:
-        soul-float-1
-        8s
-        ease-in-out
-        infinite;
-}
-
-.soul-bubble-float-2 {
-    animation:
-        soul-float-2
-        11s
-        ease-in-out
-        infinite;
-}
-
-.soul-bubble-float-3 {
-    animation:
-        soul-float-3
-        9s
-        ease-in-out
-        infinite;
-}
-
-.soul-bubble-float-4 {
-    animation:
-        soul-float-4
-        13s
-        ease-in-out
-        infinite;
-}
 
 /* =========================================================
    ACTION BUBBLES
    ========================================================= */
 
+.soul-action-position {
+    position: absolute;
+
+    z-index: 20;
+
+    pointer-events: auto;
+}
+
 .soul-action-bubble {
     position: relative;
 
-    transition:
-        filter 500ms ease;
+    transition: filter 250ms ease;
+}
+
+.soul-action-bubble > button {
+    transform-origin: center;
 }
 
 .soul-action-bubble:hover {
     filter:
-        brightness(1.15)
+        brightness(1.12)
         drop-shadow(
             0 20px 45px
             rgba(100, 180, 255, 0.12)
@@ -814,140 +899,162 @@
     pointer-events: none;
 
     opacity: 0;
+
     transform: scale(0.92);
 
     animation:
         soul-action-content-cycle
-        10s
+        12s
         ease-in-out
         infinite;
 }
 
 .soul-action-bubble:hover .soul-action-content {
     opacity: 1;
+
     transform: scale(1);
 }
 
 .soul-bubble-content {
-    animation:
-        soul-content-glow
-        4s
-        ease-in-out
-        infinite;
+    animation: soul-content-glow 4s ease-in-out infinite;
 }
 
 .soul-bubble-content-label {
-    animation:
-        soul-label-blink
-        4s
-        ease-in-out
-        infinite;
+    animation: soul-label-blink 4s ease-in-out infinite;
 }
 
 .soul-bubble-content-description {
-    animation:
-        soul-description-blink
-        6s
-        ease-in-out
-        infinite;
+    animation: soul-description-blink 6s ease-in-out infinite;
 }
+
 
 /* =========================================================
-   ACTION BUBBLE POSITIONS
+   BUBBLE POSITIONS
    ========================================================= */
-
-.soul-action-position {
-    position: absolute;
-    z-index: 20;
-}
 
 .soul-bubble-main {
     left: 50%;
     top: 50%;
 
-    transform:
-        translate(-50%, -50%);
+    transform: translate3d(-50%, -50%, 0);
 
-    animation:
-        soul-position-main
-        7s
-        ease-in-out
-        infinite;
+    animation: soul-position-main 7s ease-in-out infinite;
 }
 
 .soul-bubble-one {
     left: 15%;
     top: 20%;
 
-    animation:
-        soul-position-one
-        9s
-        ease-in-out
-        infinite;
+    animation: soul-position-one 9s ease-in-out infinite;
 }
 
 .soul-bubble-two {
     right: 14%;
     top: 17%;
 
-    animation:
-        soul-position-two
-        11s
-        ease-in-out
-        infinite;
+    animation: soul-position-two 11s ease-in-out infinite;
 }
 
 .soul-bubble-three {
     left: 7%;
     top: 52%;
 
-    animation:
-        soul-position-three
-        10s
-        ease-in-out
-        infinite;
+    animation: soul-position-three 10s ease-in-out infinite;
 }
 
 .soul-bubble-four {
     right: 8%;
     top: 53%;
 
-    animation:
-        soul-position-four
-        8s
-        ease-in-out
-        infinite;
+    animation: soul-position-four 8s ease-in-out infinite;
 }
 
 .soul-bubble-five {
     left: 22%;
     bottom: 12%;
 
-    animation:
-        soul-position-five
-        12s
-        ease-in-out
-        infinite;
+    animation: soul-position-five 12s ease-in-out infinite;
 }
 
 .soul-bubble-six {
     right: 23%;
     bottom: 14%;
 
-    animation:
-        soul-position-six
-        10s
-        ease-in-out
-        infinite;
+    animation: soul-position-six 10s ease-in-out infinite;
 }
 
+
 /* =========================================================
-   SOUL CHAT
+   CHAT LAYOUT
    ========================================================= */
+
+.soul-chat-header {
+    position: relative;
+
+    z-index: 30;
+
+    flex-shrink: 0;
+
+    width: 100%;
+
+    padding:
+        max(12px, env(safe-area-inset-top))
+        16px
+        10px;
+}
+
+.soul-chat-messages {
+    width: 100%;
+    max-width: 860px;
+
+    margin: 0 auto;
+
+    padding:
+        20px 16px
+        28px;
+
+    min-height: 100%;
+}
+
+.soul-chat-footer {
+    position: relative;
+
+    z-index: 30;
+
+    flex-shrink: 0;
+
+    width: 100%;
+
+    padding:
+        8px
+        16px
+        max(14px, env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   CHAT COMPOSER
+   ========================================================= */
+
+.soul-composer {
+    width: 100%;
+    max-width: 760px;
+
+    margin: 0 auto;
+}
 
 .soul-chat-input {
     position: relative;
+
+    isolation: isolate;
+
     overflow: hidden;
+
+    width: 100%;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    border-radius: 28px;
 
     background:
         linear-gradient(
@@ -956,37 +1063,94 @@
             rgba(255, 255, 255, 0.018)
         );
 
-    border: 1px solid rgba(255, 255, 255, 0.10);
-
-    backdrop-filter:
-        blur(28px)
-        saturate(150%);
-
-    -webkit-backdrop-filter:
-        blur(28px)
-        saturate(150%);
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.10),
         0 20px 70px rgba(0, 0, 0, 0.35);
 
     transition:
-        border-color 500ms ease,
-        box-shadow 500ms ease;
+        border-color 200ms ease,
+        box-shadow 200ms ease;
 }
 
 .soul-chat-input:focus-within {
-    border-color:
-        rgba(103, 232, 249, 0.18);
+    border-color: rgba(103, 232, 249, 0.20);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.12),
-        0 0 55px rgba(34, 211, 238, 0.06),
+        0 0 45px rgba(34, 211, 238, 0.05),
         0 20px 70px rgba(0, 0, 0, 0.35);
 }
 
+.soul-chat-input-inner {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+.soul-textarea {
+    display: block;
+
+    width: 100%;
+
+    min-height: 48px;
+    max-height: 160px;
+
+    padding: 10px 12px;
+
+    border: 0;
+    outline: 0;
+
+    resize: none;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 16px;
+    line-height: 1.75;
+
+    scrollbar-width: none;
+
+    -webkit-appearance: none;
+}
+
+.soul-textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.soul-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.soul-textarea:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.5;
+}
+
+
+/* =========================================================
+   INPUT DECORATION
+   ========================================================= */
+
 .soul-chat-input-shine {
     position: absolute;
+
+    z-index: 1;
 
     left: -100%;
     top: 0;
@@ -1006,12 +1170,9 @@
             transparent
         );
 
-    animation:
-        soul-input-shine
-        8s
-        ease-in-out
-        infinite;
+    animation: soul-input-shine 10s ease-in-out infinite;
 }
+
 
 /* =========================================================
    SEND BUTTON
@@ -1020,128 +1181,225 @@
 .soul-send {
     position: relative;
 
+    flex-shrink: 0;
+
+    width: 44px;
+    height: 44px;
+
     border: 1px solid rgba(255, 255, 255, 0.11);
 
-    background:
-        rgba(255, 255, 255, 0.065);
+    background: rgba(255, 255, 255, 0.065);
 
-    backdrop-filter:
-        blur(20px)
-        saturate(150%);
-
-    -webkit-backdrop-filter:
-        blur(20px)
-        saturate(150%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.10);
 
     transition:
-        transform 300ms ease,
-        border-color 300ms ease,
-        background 300ms ease,
-        box-shadow 300ms ease;
+        transform 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
 }
 
 .soul-send:not(:disabled) {
-    animation:
-        soul-send-pulse
-        3.5s
-        ease-in-out
-        infinite;
+    animation: soul-send-pulse 4s ease-in-out infinite;
 }
 
 .soul-send:hover:not(:disabled) {
-    transform: scale(1.05);
+    transform: scale(1.04);
 
-    border-color:
-        rgba(103, 232, 249, 0.22);
+    border-color: rgba(103, 232, 249, 0.22);
 
-    background:
-        rgba(255, 255, 255, 0.10);
-
-    box-shadow:
-        0 0 25px rgba(34, 211, 238, 0.09),
-        inset 0 1px 0 rgba(255, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.10);
 }
 
 .soul-send:active:not(:disabled) {
-    transform: scale(0.95);
+    transform: scale(0.94);
 }
+
 
 /* =========================================================
-   CHAT FLOATING LIGHTS
-   ========================================================= */
-
-.soul-chat-float-one {
-    animation:
-        soul-chat-float-one
-        14s
-        ease-in-out
-        infinite;
-}
-
-.soul-chat-float-two {
-    animation:
-        soul-chat-float-two
-        17s
-        ease-in-out
-        infinite;
-}
-
-/* =========================================================
-   CHAT MESSAGE
+   MESSAGE
    ========================================================= */
 
 .soul-message-in,
 .animate-message-in {
     animation:
         soul-message-in
-        350ms
-        ease-out
+        300ms
+        cubic-bezier(.22, 1, .36, 1)
         both;
 }
 
-/* =========================================================
-   SMALL CORE
-   ========================================================= */
-
 .soul-small-core {
-    animation:
-        soul-small-core
-        4s
-        ease-in-out
-        infinite;
+    animation: soul-small-core 4s ease-in-out infinite;
 }
 
+
 /* =========================================================
-   SCROLLBARS
+   MESSAGE WIDTH
    ========================================================= */
 
-.soul-scrollbar,
-.soul-chat-scroll,
-.soul-textarea {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+.soul-user-message {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
 }
 
-.soul-scrollbar::-webkit-scrollbar,
-.soul-chat-scroll::-webkit-scrollbar,
-.soul-textarea::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
+.soul-user-message-content {
+    width: fit-content;
+    max-width: min(90%, 680px);
+
+    min-width: 0;
 }
+
+.soul-assistant-message {
+    width: 100%;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+}
+
+.soul-assistant-message-content {
+    min-width: 0;
+
+    width: min(100%, 760px);
+}
+
 
 /* =========================================================
-   KEYFRAMES — BACKGROUND
+   FEEDBACK MODAL
+   ========================================================= */
+
+.soul-feedback-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        max(8px, env(safe-area-inset-top))
+        8px
+        max(8px, env(safe-area-inset-bottom));
+
+    background: rgba(0, 0, 0, 0.72);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.soul-feedback-modal {
+    width: min(100%, 448px);
+
+    max-height:
+        calc(
+            100dvh
+            - env(safe-area-inset-top)
+            - env(safe-area-inset-bottom)
+            - 16px
+        );
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    border-radius: 22px;
+
+    background: #101116;
+
+    box-shadow:
+        0 30px 100px
+        rgba(0, 0, 0, 0.60);
+}
+
+.soul-feedback-content {
+    min-height: 0;
+
+    flex: 1 1 auto;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* =========================================================
+   CODE / HISTORY SCROLL
+   ========================================================= */
+
+.soul-code-scroll {
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255, 255, 255, 0.15)
+        transparent;
+}
+
+.soul-code-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.soul-code-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.soul-code-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+
+    border-radius: 999px;
+}
+
+.soul-history-scroll {
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255, 255, 255, 0.10)
+        transparent;
+}
+
+.soul-history-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.soul-history-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.soul-history-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.10);
+
+    border-radius: 999px;
+}
+
+
+/* =========================================================
+   DESKTOP POSITION ANIMATIONS
    ========================================================= */
 
 @keyframes soul-breathe {
-    0%,
-    100% {
+    0%, 100% {
         transform:
-            translate(-50%, -50%)
+            translate3d(-50%, -50%, 0)
             scale(0.82);
 
         opacity: 0.45;
@@ -1149,7 +1407,7 @@
 
     50% {
         transform:
-            translate(-50%, -50%)
+            translate3d(-50%, -50%, 0)
             scale(1.12);
 
         opacity: 0.9;
@@ -1157,30 +1415,27 @@
 }
 
 @keyframes soul-float-one {
-    0%,
-    100% {
-        transform: translate(0, 0);
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate(80px, 60px);
+        transform: translate3d(80px, 60px, 0);
     }
 }
 
 @keyframes soul-float-two {
-    0%,
-    100% {
-        transform: translate(0, 0);
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate(-70px, -50px);
+        transform: translate3d(-70px, -50px, 0);
     }
 }
 
 @keyframes soul-twinkle {
-    0%,
-    100% {
+    0%, 100% {
         opacity: 0.15;
         transform: scale(0.7);
     }
@@ -1192,53 +1447,49 @@
 }
 
 @keyframes soul-color-violet {
-    0%,
-    100% {
+    0%, 100% {
         transform:
-            translate(0, 0)
+            translate3d(0, 0, 0)
             scale(1);
     }
 
     50% {
         transform:
-            translate(100px, 80px)
+            translate3d(100px, 80px, 0)
             scale(1.2);
     }
 }
 
 @keyframes soul-color-cyan {
-    0%,
-    100% {
+    0%, 100% {
         transform:
-            translate(0, 0)
+            translate3d(0, 0, 0)
             scale(1);
     }
 
     50% {
         transform:
-            translate(-100px, 80px)
+            translate3d(-100px, 80px, 0)
             scale(1.15);
     }
 }
 
 @keyframes soul-color-pink {
-    0%,
-    100% {
+    0%, 100% {
         transform:
-            translate(0, 0)
+            translate3d(0, 0, 0)
             scale(1);
     }
 
     50% {
         transform:
-            translate(50px, -80px)
+            translate3d(50px, -80px, 0)
             scale(1.2);
     }
 }
 
 @keyframes soul-background-float-one {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             scale(1);
@@ -1252,8 +1503,7 @@
 }
 
 @keyframes soul-background-float-two {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             scale(1);
@@ -1267,8 +1517,7 @@
 }
 
 @keyframes soul-background-float-three {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             scale(1);
@@ -1281,69 +1530,23 @@
     }
 }
 
-/* =========================================================
-   KEYFRAMES — GLASS
-   ========================================================= */
-
 @keyframes soul-glass-shine {
     0% {
         left: -140%;
     }
 
-    45%,
-    100% {
+    45%, 100% {
         left: 130%;
     }
 }
 
-@keyframes soul-liquid-move {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0)
-            scale(1);
-    }
-
-    50% {
-        transform:
-            translate3d(40px, -30px, 0)
-            scale(1.12);
-    }
-}
-
-/* =========================================================
-   KEYFRAMES — BUTTON / LOGO
-   ========================================================= */
-
-@keyframes soul-button-breathe {
-    0%,
-    100% {
-        transform: scale(1);
-
-        box-shadow:
-            0 8px 30px
-            rgba(255, 255, 255, 0.10);
-    }
-
-    50% {
-        transform: scale(1.015);
-
-        box-shadow:
-            0 10px 42px
-            rgba(255, 255, 255, 0.18);
-    }
-}
-
 @keyframes soul-logo-breathe {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(1);
-        filter: brightness(1);
     }
 
     50% {
         transform: scale(1.045);
-        filter: brightness(1.18);
     }
 }
 
@@ -1357,13 +1560,8 @@
     }
 }
 
-/* =========================================================
-   KEYFRAMES — BUBBLE
-   ========================================================= */
-
 @keyframes soul-bubble-breathe {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(0.96);
     }
 
@@ -1373,8 +1571,7 @@
 }
 
 @keyframes soul-aura-breathe {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(0.9);
         opacity: 0.55;
     }
@@ -1386,8 +1583,7 @@
 }
 
 @keyframes soul-liquid-blob {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             scale(1)
@@ -1410,8 +1606,7 @@
 }
 
 @keyframes soul-liquid-blob-reverse {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             scale(1);
@@ -1431,25 +1626,23 @@
 }
 
 @keyframes soul-pink-float {
-    0%,
-    100% {
+    0%, 100% {
         transform:
-            translate(0, 0)
+            translate3d(0, 0, 0)
             scale(1);
     }
 
     50% {
         transform:
-            translate(30%, -20%)
+            translate3d(30%, -20%, 0)
             scale(1.2);
     }
 }
 
 @keyframes soul-core-breathe {
-    0%,
-    100% {
+    0%, 100% {
         transform:
-            translate(-50%, -50%)
+            translate3d(-50%, -50%, 0)
             scale(0.9)
             rotate(0deg);
 
@@ -1458,7 +1651,7 @@
 
     50% {
         transform:
-            translate(-50%, -50%)
+            translate3d(-50%, -50%, 0)
             scale(1.08)
             rotate(12deg);
 
@@ -1467,8 +1660,7 @@
 }
 
 @keyframes soul-core-pulse {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(0.75);
         opacity: 0.75;
     }
@@ -1489,91 +1681,35 @@
         opacity: 1;
     }
 
-    55%,
-    100% {
+    55%, 100% {
         left: 140%;
         opacity: 0;
     }
 }
 
-/* =========================================================
-   KEYFRAMES — BUBBLE FLOAT
-   ========================================================= */
-
-@keyframes soul-float-1 {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform:
-            translate3d(25px, -30px, 0);
-    }
-}
-
-@keyframes soul-float-2 {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform:
-            translate3d(-35px, 20px, 0);
-    }
-}
-
-@keyframes soul-float-3 {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform:
-            translate3d(20px, 35px, 0);
-    }
-}
-
-@keyframes soul-float-4 {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform:
-            translate3d(-25px, -35px, 0);
-    }
-}
 
 /* =========================================================
-   KEYFRAMES — ACTION BUBBLES
+   BUBBLE POSITION KEYFRAMES
    ========================================================= */
 
 @keyframes soul-position-main {
-    0%,
-    100% {
+    0%, 100% {
         transform:
-            translate(-50%, -50%)
-            translate3d(0, 0, 0);
+            translate3d(-50%, -50%, 0);
     }
 
     50% {
         transform:
-            translate(-50%, -50%)
-            translate3d(0, -14px, 0);
+            translate3d(
+                -50%,
+                calc(-50% - 14px),
+                0
+            );
     }
 }
 
 @keyframes soul-position-one {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             rotate(-3deg);
@@ -1587,8 +1723,7 @@
 }
 
 @keyframes soul-position-two {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             rotate(2deg);
@@ -1602,34 +1737,27 @@
 }
 
 @keyframes soul-position-three {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
     }
 
     50% {
-        transform:
-            translate3d(22px, -18px, 0);
+        transform: translate3d(22px, -18px, 0);
     }
 }
 
 @keyframes soul-position-four {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
     }
 
     50% {
-        transform:
-            translate3d(-20px, 20px, 0);
+        transform: translate3d(-20px, 20px, 0);
     }
 }
 
 @keyframes soul-position-five {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             rotate(-2deg);
@@ -1643,8 +1771,7 @@
 }
 
 @keyframes soul-position-six {
-    0%,
-    100% {
+    0%, 100% {
         transform:
             translate3d(0, 0, 0)
             rotate(2deg);
@@ -1657,26 +1784,23 @@
     }
 }
 
+
 /* =========================================================
-   KEYFRAMES — CONTENT
+   CONTENT ANIMATIONS
    ========================================================= */
 
 @keyframes soul-content-glow {
-    0%,
-    100% {
+    0%, 100% {
         opacity: 0.45;
-        filter: brightness(0.8);
     }
 
     50% {
         opacity: 1;
-        filter: brightness(1.25);
     }
 }
 
 @keyframes soul-label-blink {
-    0%,
-    100% {
+    0%, 100% {
         opacity: 0.65;
     }
 
@@ -1686,8 +1810,7 @@
 }
 
 @keyframes soul-description-blink {
-    0%,
-    100% {
+    0%, 100% {
         opacity: 0.35;
     }
 
@@ -1712,20 +1835,11 @@
         transform: scale(1);
     }
 
-    55% {
-        opacity: 0;
-        transform: scale(0.92);
-    }
-
-    100% {
+    55%, 100% {
         opacity: 0;
         transform: scale(0.92);
     }
 }
-
-/* =========================================================
-   KEYFRAMES — CHAT
-   ========================================================= */
 
 @keyframes soul-input-shine {
     0% {
@@ -1737,16 +1851,14 @@
         opacity: 1;
     }
 
-    50%,
-    100% {
+    50%, 100% {
         left: 150%;
         opacity: 0;
     }
 }
 
 @keyframes soul-send-pulse {
-    0%,
-    100% {
+    0%, 100% {
         box-shadow:
             0 0 0
             rgba(34, 211, 238, 0);
@@ -1754,54 +1866,29 @@
 
     50% {
         box-shadow:
-            0 0 25px
-            rgba(34, 211, 238, 0.09);
-    }
-}
-
-@keyframes soul-chat-float-one {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform:
-            translate3d(70px, 50px, 0);
-    }
-}
-
-@keyframes soul-chat-float-two {
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform:
-            translate3d(-60px, 60px, 0);
+            0 0 22px
+            rgba(34, 211, 238, 0.08);
     }
 }
 
 @keyframes soul-message-in {
     from {
         opacity: 0;
+
         transform:
             translate3d(0, 8px, 0);
     }
 
     to {
         opacity: 1;
+
         transform:
             translate3d(0, 0, 0);
     }
 }
 
 @keyframes soul-small-core {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(0.96);
     }
 
@@ -1810,173 +1897,450 @@
     }
 }
 
+
 /* =========================================================
    MOBILE
    ========================================================= */
 
 @media (max-width: 767px) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .soul-background {
+        height: 100dvh;
+    }
+
+    /*
+     * Much cheaper effects on mobile.
+     */
+
+    .soul-orb-main {
+        width: 300px;
+        height: 300px;
+
+        filter: blur(22px);
+    }
+
+    .soul-orb-one {
+        width: 170px;
+        height: 170px;
+
+        filter: blur(38px);
+    }
+
+    .soul-orb-two {
+        width: 200px;
+        height: 200px;
+
+        filter: blur(42px);
+    }
+
+    .soul-color {
+        opacity: 0.08;
+
+        filter: blur(55px);
+    }
+
+    .soul-color-violet {
+        width: 220px;
+        height: 220px;
+    }
+
+    .soul-color-cyan {
+        width: 200px;
+        height: 200px;
+    }
+
+    .soul-color-pink {
+        width: 180px;
+        height: 180px;
+    }
+
+    .soul-background-light {
+        width: 110px;
+        height: 110px;
+
+        opacity: 0.14;
+
+        filter: blur(38px);
+    }
+
+    .soul-grid {
+        inset: -20%;
+
+        opacity: 0.015;
+
+        background-size: 55px 55px;
+
+        transform:
+            perspective(500px)
+            rotateX(55deg)
+            translateY(8%);
+    }
+
+
+    /* -----------------------------------------
+       Glass
+       ----------------------------------------- */
+
+    .soul-glass {
+        backdrop-filter: blur(16px) saturate(125%);
+        -webkit-backdrop-filter: blur(16px) saturate(125%);
+    }
+
+    .soul-glass-button {
+        backdrop-filter: blur(12px) saturate(125%);
+        -webkit-backdrop-filter: blur(12px) saturate(125%);
+    }
+
+    .soul-glass::after {
+        display: none;
+    }
+
+
+    /* -----------------------------------------
+       Hero
+       ----------------------------------------- */
+
+    .soul-hero {
+        min-height: 100dvh;
+
+        align-items: center;
+
+        padding:
+            max(20px, env(safe-area-inset-top))
+            16px
+            max(24px, env(safe-area-inset-bottom));
+    }
+
+    .soul-hero-inner {
+        width: 100%;
+    }
+
+    .soul-hero-logo {
+        margin-bottom: 14px;
+    }
+
+    .soul-hero-title {
+        max-width: 360px;
+
+        font-size: clamp(
+            2.5rem,
+            13vw,
+            4rem
+        );
+
+        line-height: 0.95;
+    }
+
+    .soul-hero-subtitle {
+        max-width: 330px;
+
+        margin-top: 16px;
+
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .soul-hero-composer {
+        width: 100%;
+
+        margin-top: 26px;
+    }
+
+
+    /* -----------------------------------------
+       Action bubbles
+       ----------------------------------------- */
+
+    .soul-action-position {
+        max-width: 30vw;
+    }
+
+    .soul-action-bubble:hover {
+        filter: none;
+    }
+
+    .soul-action-content {
+        animation-duration: 14s;
+    }
+
     .soul-bubble-main {
+        left: 50%;
         top: 45%;
+
+        animation:
+            soul-mobile-main
+            6s
+            ease-in-out
+            infinite;
     }
 
     .soul-bubble-one {
-        left: 8%;
-        top: 19%;
+        left: 6%;
+        top: 18%;
+
+        animation:
+            soul-mobile-left-top
+            8s
+            ease-in-out
+            infinite;
     }
 
     .soul-bubble-two {
-        right: 8%;
-        top: 24%;
+        right: 6%;
+        top: 22%;
+
+        animation:
+            soul-mobile-right-top
+            9s
+            ease-in-out
+            infinite;
     }
 
     .soul-bubble-three {
-        left: 4%;
-        top: 66%;
+        left: 3%;
+        top: 64%;
+
+        animation:
+            soul-mobile-left-middle
+            10s
+            ease-in-out
+            infinite;
     }
 
     .soul-bubble-four {
-        right: 4%;
-        top: 68%;
+        right: 3%;
+        top: 65%;
+
+        animation:
+            soul-mobile-right-middle
+            9s
+            ease-in-out
+            infinite;
     }
 
     .soul-bubble-five {
-        left: 14%;
+        left: 10%;
         bottom: 7%;
+
+        animation:
+            soul-mobile-left-bottom
+            11s
+            ease-in-out
+            infinite;
     }
 
     .soul-bubble-six {
-        right: 14%;
-        bottom: 8%;
+        right: 10%;
+        bottom: 7%;
+
+        animation:
+            soul-mobile-right-bottom
+            10s
+            ease-in-out
+            infinite;
+    }
+
+
+    /* -----------------------------------------
+       Chat
+       ----------------------------------------- */
+
+    .soul-chat-header {
+        padding:
+            max(10px, env(safe-area-inset-top))
+            12px
+            8px;
+    }
+
+    .soul-chat-messages {
+        padding:
+            14px 12px
+            22px;
+    }
+
+    .soul-chat-footer {
+        padding:
+            6px 10px
+            max(10px, env(safe-area-inset-bottom));
+    }
+
+    .soul-chat-input {
+        border-radius: 23px;
+
+        backdrop-filter: blur(16px) saturate(125%);
+        -webkit-backdrop-filter: blur(16px) saturate(125%);
+    }
+
+    .soul-textarea {
+        min-height: 46px;
+
+        padding:
+            9px 10px;
+
+        font-size: 16px;
+
+        line-height: 1.6;
+    }
+
+    .soul-send {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    /* -----------------------------------------
+       Messages
+       ----------------------------------------- */
+
+    .soul-user-message-content {
+        max-width: 90%;
+    }
+
+    .soul-assistant-message {
+        gap: 9px;
+    }
+
+    .soul-assistant-message-content {
+        width: calc(100% - 42px);
+    }
+
+
+    /* -----------------------------------------
+       Feedback
+       ----------------------------------------- */
+
+    .soul-feedback-overlay {
+        align-items: flex-end;
+
+        padding:
+            6px
+            6px
+            max(6px, env(safe-area-inset-bottom));
+    }
+
+    .soul-feedback-modal {
+        width: 100%;
+
+        max-height:
+            calc(
+                100dvh
+                - env(safe-area-inset-top)
+                - env(safe-area-inset-bottom)
+                - 12px
+            );
+
+        border-radius: 22px;
     }
 }
+
+
+/* =========================================================
+   MOBILE BUBBLE ANIMATIONS
+   ========================================================= */
+
+@keyframes soul-mobile-main {
+    0%, 100% {
+        transform:
+            translate3d(-50%, -50%, 0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate3d(
+                -50%,
+                calc(-50% - 8px),
+                0
+            )
+            scale(1.02);
+    }
+}
+
+@keyframes soul-mobile-left-top {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(8px, -10px, 0);
+    }
+}
+
+@keyframes soul-mobile-right-top {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(-8px, 8px, 0);
+    }
+}
+
+@keyframes soul-mobile-left-middle {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(8px, -8px, 0);
+    }
+}
+
+@keyframes soul-mobile-right-middle {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(-8px, -8px, 0);
+    }
+}
+
+@keyframes soul-mobile-left-bottom {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(8px, -8px, 0);
+    }
+}
+
+@keyframes soul-mobile-right-bottom {
+    0%, 100% {
+        transform: translate3d(-0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(-8px, -8px, 0);
+    }
+}
+
 
 /* =========================================================
    REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-    .soul-orb-main,
-    .soul-orb-one,
-    .soul-orb-two,
-    .soul-color-violet,
-    .soul-color-cyan,
-    .soul-color-pink,
-    .soul-background-light-one,
-    .soul-background-light-two,
-    .soul-background-light-three,
-    .soul-stars span,
-    .soul-glass::after,
-    .animate-soul-button,
-    .soul-logo-breathe,
-    .soul-logo-breathe::after,
-    .soul-bubble-body,
-    .soul-bubble-aura,
-    .soul-bubble-liquid,
-    .soul-bubble-liquid-reverse,
-    .soul-bubble-pink,
-    .soul-core,
-    .soul-core-light,
-    .soul-bubble-shine,
-    .soul-bubble-float-1,
-    .soul-bubble-float-2,
-    .soul-bubble-float-3,
-    .soul-bubble-float-4,
-    .soul-bubble-main,
-    .soul-bubble-one,
-    .soul-bubble-two,
-    .soul-bubble-three,
-    .soul-bubble-four,
-    .soul-bubble-five,
-    .soul-bubble-six,
-    .soul-bubble-content,
-    .soul-bubble-content-label,
-    .soul-bubble-content-description,
-    .soul-action-content,
-    .soul-chat-input-shine,
-    .soul-send:not(:disabled),
-    .soul-chat-float-one,
-    .soul-chat-float-two,
-    .soul-message-in,
-    .animate-message-in,
-    .soul-small-core {
-        animation: none;
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 
     .soul-action-content {
         opacity: 1;
         transform: none;
     }
-}
-
-
-.soul-action-bubble {
-    position: relative;
-}
-
-/* Keep button interaction separate from
-   the bubble's own floating animation */
-
-.soul-action-bubble > button {
-    transform-origin: center;
-}
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-    .soul-action-bubble > button {
-        transition: none;
-    }
-}
-
-.soul-code-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-}
-
-.soul-code-scroll::-webkit-scrollbar {
-    height: 6px;
-}
-
-.soul-code-scroll::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.soul-code-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 999px;
-}
-
-.soul-code-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
-
-
-/* ============================================================
-SOUL HISTORY SCROLLBAR
-============================================================ */
-
-.soul-history-scroll {
-scrollbar-width: thin;
-scrollbar-color: rgba(255, 255, 255, 0.10) transparent;
-}
-
-/* Chrome / Edge / Safari */
-
-.soul-history-scroll::-webkit-scrollbar {
-width: 4px;
-}
-
-.soul-history-scroll::-webkit-scrollbar-track {
-background: transparent;
-}
-
-.soul-history-scroll::-webkit-scrollbar-thumb {
-background: rgba(255, 255, 255, 0.10);
-border-radius: 999px;
-}
-
-.soul-history-scroll::-webkit-scrollbar-thumb:hover {
-background: rgba(255, 255, 255, 0.18);
 }

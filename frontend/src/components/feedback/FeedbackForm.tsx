@@ -79,9 +79,15 @@ export default function FeedbackForm({
         useState(Math.max(retryAfter, 0));
 
     useEffect(() => {
-        setRemainingSeconds(
-            Math.max(retryAfter, 0)
-        );
+        const timer = window.setTimeout(() => {
+            setRemainingSeconds(
+                Math.max(retryAfter, 0)
+            );
+        }, 0);
+
+        return () => {
+            window.clearTimeout(timer);
+        };
     }, [retryAfter]);
 
     useEffect(() => {
@@ -218,11 +224,11 @@ export default function FeedbackForm({
             const metadata:
                 CreateFeedbackInput["metadata"] =
                 typeof window !==
-                "undefined"
+                    "undefined"
                     ? {
                         browser:
                             typeof navigator !==
-                            "undefined"
+                                "undefined"
                                 ? navigator.userAgent.slice(
                                     0,
                                     100
@@ -233,7 +239,7 @@ export default function FeedbackForm({
 
                         device:
                             window.innerWidth <
-                            768
+                                768
                                 ? "mobile"
                                 : window.innerWidth <
                                     1024
@@ -274,9 +280,9 @@ export default function FeedbackForm({
 
                 featureSuggestion:
                     type === "feature" &&
-                    featureSuggestion
-                        .trim()
-                        .length > 0
+                        featureSuggestion
+                            .trim()
+                            .length > 0
                         ? featureSuggestion.trim()
                         : undefined,
 

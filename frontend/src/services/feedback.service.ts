@@ -43,4 +43,6 @@ class FeedbackService {
     }
 }
 
-export default new FeedbackService();
+const feedbackService = new FeedbackService();
+
+export default feedbackService;

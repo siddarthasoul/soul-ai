@@ -2,6 +2,7 @@
 
 import {
     useCallback,
+    useEffect,
     useRef,
     type KeyboardEvent,
 } from "react";
@@ -14,7 +15,10 @@ interface ChatComposerProps {
     onSend: () => void | Promise<void>;
     disabled: boolean;
     isStreaming: boolean;
-    disabledReason?: "connecting" | "joining" | "rate-limited";
+    disabledReason?:
+    | "connecting"
+    | "joining"
+    | "rate-limited";
 }
 
 export default function ChatComposer({
@@ -28,6 +32,9 @@ export default function ChatComposer({
     const textareaRef =
         useRef<HTMLTextAreaElement>(null);
 
+    // ============================================================
+    // TEXTAREA RESIZE
+    // ============================================================
 
     const resizeTextarea = useCallback(() => {
         const textarea =
@@ -39,12 +46,23 @@ export default function ChatComposer({
 
         textarea.style.height = "auto";
 
+        const nextHeight = Math.min(
+            textarea.scrollHeight,
+            160
+        );
+
         textarea.style.height =
-            `${Math.min(
-                textarea.scrollHeight,
-                160
-            )}px`;
+            `${nextHeight}px`;
     }, []);
+
+    // Resize AFTER React updates the textarea value.
+    useEffect(() => {
+        resizeTextarea();
+    }, [value, resizeTextarea]);
+
+    // ============================================================
+    // CHANGE
+    // ============================================================
 
     const handleChange = (
         nextValue: string
@@ -54,25 +72,40 @@ export default function ChatComposer({
         }
 
         onChange(nextValue);
-        resizeTextarea();
     };
+
+    // ============================================================
+    // KEYBOARD
+    // ============================================================
 
     const handleKeyDown = (
         event: KeyboardEvent<HTMLTextAreaElement>
     ) => {
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-            event.preventDefault();
-
-            if (disabled) {
-                return;
-            }
-
-            void onSend();
+        if (event.key !== "Enter") {
+            return;
         }
+
+        // Shift + Enter = new line
+        if (event.shiftKey) {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (
+            disabled ||
+            isStreaming ||
+            !value.trim()
+        ) {
+            return;
+        }
+
+        void onSend();
     };
+
+    // ============================================================
+    // PLACEHOLDER
+    // ============================================================
 
     const placeholder =
         isStreaming
@@ -85,41 +118,40 @@ export default function ChatComposer({
                         ? "Connecting..."
                         : "Message SOUL...";
 
+    // ============================================================
+    // UI
+    // ============================================================
+
     return (
-        <footer className="relative z-20 shrink-0 px-4 pb-4 pt-2 sm:px-7 sm:pb-6">
-            <div className="mx-auto w-full max-w-3xl">
-                <div className="relative overflow-hidden rounded-[28px] border border-white/[0.10] bg-white/[0.045] p-2 shadow-[0_20px_70px_rgba(0,0,0,0.35)] backdrop-blur-3xl focus-within:border-cyan-300/[0.18]">
+        <footer className="soul-chat-footer">
+            <div className="soul-composer">
 
-                    <div className="pointer-events-none absolute -left-16 -top-16 size-36 rounded-full bg-cyan-400/[0.07] blur-3xl" />
+                <div className="soul-chat-input">
 
-                    <div className="pointer-events-none absolute -bottom-20 -right-16 size-40 rounded-full bg-purple-500/[0.06] blur-3xl" />
+                    <div className="pointer-events-none absolute -left-16 -top-16 size-32 rounded-full bg-cyan-400/[0.06] blur-3xl" />
 
-                    <div className="relative z-10 flex items-end gap-2">
+                    <div className="pointer-events-none absolute -bottom-20 -right-16 size-36 rounded-full bg-purple-500/[0.05] blur-3xl" />
+
+                    <div className="soul-chat-input-inner">
 
                         <textarea
                             ref={textareaRef}
                             value={value}
                             onChange={(event) =>
-                                handleChange(
-                                    event.target.value
-                                )
+                                handleChange(event.target.value)
                             }
-                            onKeyDown={
-                                handleKeyDown
-                            }
+                            onKeyDown={handleKeyDown}
                             rows={1}
                             disabled={disabled}
                             placeholder={placeholder}
                             aria-disabled={disabled}
-                            className="soul-textarea max-h-40 min-h-12 flex-1 resize-none overflow-y-auto bg-transparent px-3 py-3 text-[16px] leading-7 text-white outline-none placeholder:text-white/[0.25] disabled:cursor-not-allowed disabled:opacity-50 sm:text-[17px]"
+                            className="soul-textarea"
                         />
 
                         <Button
                             variant="glass"
                             size="md"
-                            onClick={() =>
-                                void onSend()
-                            }
+                            onClick={() => void onSend()}
                             disabled={
                                 disabled ||
                                 !value.trim()
@@ -151,16 +183,15 @@ export default function ChatComposer({
                                 </svg>
                             )}
                         </Button>
+
                     </div>
                 </div>
 
                 <p className="mt-2 text-center text-[10px] font-medium text-white/[0.18]">
-                    SOUL can make mistakes.
-                    Verify important information.
+                    SOUL can make mistakes. Verify important information.
                 </p>
+
             </div>
         </footer>
     );
-
-
 }
