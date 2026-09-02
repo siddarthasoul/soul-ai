@@ -35,17 +35,15 @@ export default function LoginForm() {
         }
 
         try {
-            const response =
-                await requestOtp({
-                    email: normalizedEmail,
-                });
+            const response = await requestOtp({
+                email: normalizedEmail,
+            });
 
             if (!response.success) {
                 setError(
                     response.message ??
                         "Unable to send verification code.",
                 );
-
                 return;
             }
 
@@ -69,18 +67,29 @@ export default function LoginForm() {
             className="
                 flex
                 w-full
+                min-w-0
                 flex-col
-                gap-4
+                gap-2
+                sm:gap-4
             "
         >
             {/* Email */}
-            <div className="flex flex-col gap-1.5">
+            <div
+                className="
+                    flex
+                    min-w-0
+                    flex-col
+                    gap-0.5
+                    sm:gap-1.5
+                "
+            >
                 <label
                     htmlFor="email"
                     className="
-                        text-xs
+                        text-[9px]
                         font-medium
                         text-white/60
+                        sm:text-xs
                     "
                 >
                     Email
@@ -99,14 +108,17 @@ export default function LoginForm() {
                     placeholder="you@example.com"
                     disabled={isLoading}
                     className="
-                        h-10
+                        box-border
+                        h-7
                         w-full
-                        rounded-xl
+                        min-w-0
+                        max-w-full
+                        rounded-lg
                         border
                         border-white/10
                         bg-white/[0.035]
-                        px-3.5
-                        text-sm
+                        px-2.5
+                        text-[11px]
                         text-white
                         outline-none
                         placeholder:text-white/25
@@ -119,6 +131,10 @@ export default function LoginForm() {
                         focus:ring-cyan-300/10
                         disabled:cursor-not-allowed
                         disabled:opacity-40
+                        sm:h-10
+                        sm:rounded-xl
+                        sm:px-3.5
+                        sm:text-sm
                     "
                 />
             </div>
@@ -128,15 +144,24 @@ export default function LoginForm() {
                 <p
                     role="alert"
                     className="
-                        rounded-lg
+                        w-full
+                        min-w-0
+                        max-w-full
+                        break-words
+                        rounded-md
                         border
                         border-red-400/10
                         bg-red-400/[0.04]
-                        px-3
-                        py-1.5
-                        text-xs
-                        leading-5
+                        px-2
+                        py-0.5
+                        text-[9px]
+                        leading-3.5
                         text-red-300/90
+                        sm:rounded-lg
+                        sm:px-3
+                        sm:py-1.5
+                        sm:text-xs
+                        sm:leading-5
                     "
                 >
                     {error}
@@ -144,28 +169,55 @@ export default function LoginForm() {
             )}
 
             {/* Continue */}
-            <div className="flex justify-center pt-1">
+            <div
+                className="
+                    flex
+                    justify-center
+                    pt-0
+                    sm:pt-1
+                "
+            >
                 <Button
                     type="submit"
                     variant="glass"
                     size="sm"
                     loading={isLoading}
+                    className="
+                        scale-90
+                        sm:scale-100
+                    "
                 >
                     Continue
                 </Button>
             </div>
 
             {/* Register */}
-            <div className="flex items-center justify-center gap-1.5 text-xs">
-                <span className="text-white/35">
-                    Don&apos;t have a SOUL account?
+            <div
+                className="
+                    flex
+                    flex-wrap
+                    items-center
+                    justify-center
+                    gap-1
+                    px-1
+                    text-[9px]
+                    leading-4
+                    sm:gap-1.5
+                    sm:text-xs
+                "
+            >
+                <span className="text-center text-white/35">
+                    Don't have a SOUL account?
                 </span>
 
                 <button
                     type="button"
-                    onClick={() => router.push("/register")}
+                    onClick={() =>
+                        router.push("/register")
+                    }
                     disabled={isLoading}
                     className="
+                        shrink-0
                         text-cyan-300/80
                         transition-colors
                         hover:text-cyan-200

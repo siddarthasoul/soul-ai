@@ -14,7 +14,6 @@ import Button from "@/src/components/ui/Button";
 export default function RegisterForm() {
     const router = useRouter();
 
-
     const { createUser } = useUser();
 
     const [name, setName] = useState("");
@@ -62,7 +61,6 @@ export default function RegisterForm() {
                     response.message ??
                     "Unable to create account.",
                 );
-
                 return;
             }
 
@@ -86,35 +84,32 @@ export default function RegisterForm() {
         <form
             onSubmit={handleSubmit}
             className="
-            flex
-            w-full
-            min-w-0
-            flex-col
-            gap-2
-
-            sm:gap-3.5
-        "
+                flex
+                w-full
+                min-w-0
+                flex-col
+                gap-1.5
+                sm:gap-3.5
+            "
         >
             {/* Name */}
             <div
                 className="
-                flex
-                min-w-0
-                flex-col
-                gap-0.5
-
-                sm:gap-1.5
-            "
+                    flex
+                    min-w-0
+                    flex-col
+                    gap-0.5
+                    sm:gap-1.5
+                "
             >
                 <label
                     htmlFor="name"
                     className="
-                    text-[10px]
-                    font-medium
-                    text-white/60
-
-                    sm:text-xs
-                "
+                        text-[9px]
+                        font-medium
+                        text-white/60
+                        sm:text-xs
+                    "
                 >
                     Name
                 </label>
@@ -131,57 +126,55 @@ export default function RegisterForm() {
                     placeholder="Your name"
                     disabled={loading}
                     className="
-                    box-border
-                    h-8
-                    w-full
-                    min-w-0
-                    max-w-full
-                    rounded-xl
-                    border
-                    border-white/10
-                    bg-white/[0.035]
-                    px-3
-                    text-xs
-                    text-white
-                    outline-none
-                    placeholder:text-white/25
-                    backdrop-blur-xl
-                    transition-all
-                    duration-300
-                    focus:border-cyan-300/30
-                    focus:bg-white/[0.055]
-                    focus:ring-1
-                    focus:ring-cyan-300/10
-                    disabled:cursor-not-allowed
-                    disabled:opacity-40
-
-                    sm:h-10
-                    sm:px-3.5
-                    sm:text-sm
-                "
+                        box-border
+                        h-7
+                        w-full
+                        min-w-0
+                        max-w-full
+                        rounded-lg
+                        border
+                        border-white/10
+                        bg-white/[0.035]
+                        px-2.5
+                        text-[11px]
+                        text-white
+                        outline-none
+                        placeholder:text-white/25
+                        backdrop-blur-xl
+                        transition-all
+                        duration-300
+                        focus:border-cyan-300/30
+                        focus:bg-white/[0.055]
+                        focus:ring-1
+                        focus:ring-cyan-300/10
+                        disabled:cursor-not-allowed
+                        disabled:opacity-40
+                        sm:h-10
+                        sm:rounded-xl
+                        sm:px-3.5
+                        sm:text-sm
+                    "
                 />
             </div>
 
             {/* Email */}
             <div
                 className="
-                flex
-                min-w-0
-                flex-col
-                gap-0.5
-
-                sm:gap-1.5
-            "
+                    flex
+                    min-w-0
+                    flex-col
+                    gap-0.5
+                    sm:gap-1.5
+                "
             >
                 <label
                     htmlFor="email"
                     className="
-                    text-[10px]
-                    font-medium
-                    text-white/60
-
-                    sm:text-xs
-                "
+                        text-[9px]
+                        font-medium
+                        text-white/60
+                        sm:text-xs
+                    "
                 >
                     Email
                 </label>
@@ -198,57 +191,55 @@ export default function RegisterForm() {
                     placeholder="you@example.com"
                     disabled={loading}
                     className="
-                    box-border
-                    h-8
-                    w-full
-                    min-w-0
-                    max-w-full
-                    rounded-xl
-                    border
-                    border-white/10
-                    bg-white/[0.035]
-                    px-3
-                    text-xs
-                    text-white
-                    outline-none
-                    placeholder:text-white/25
-                    backdrop-blur-xl
-                    transition-all
-                    duration-300
-                    focus:border-cyan-300/30
-                    focus:bg-white/[0.055]
-                    focus:ring-1
-                    focus:ring-cyan-300/10
-                    disabled:cursor-not-allowed
-                    disabled:opacity-40
-
-                    sm:h-10
-                    sm:px-3.5
-                    sm:text-sm
-                "
+                        box-border
+                        h-7
+                        w-full
+                        min-w-0
+                        max-w-full
+                        rounded-lg
+                        border
+                        border-white/10
+                        bg-white/[0.035]
+                        px-2.5
+                        text-[11px]
+                        text-white
+                        outline-none
+                        placeholder:text-white/25
+                        backdrop-blur-xl
+                        transition-all
+                        duration-300
+                        focus:border-cyan-300/30
+                        focus:bg-white/[0.055]
+                        focus:ring-1
+                        focus:ring-cyan-300/10
+                        disabled:cursor-not-allowed
+                        disabled:opacity-40
+                        sm:h-10
+                        sm:rounded-xl
+                        sm:px-3.5
+                        sm:text-sm
+                    "
                 />
             </div>
 
             {/* Date of birth */}
             <div
                 className="
-                flex
-                min-w-0
-                flex-col
-                gap-0.5
-
-                sm:gap-1.5
-            "
+                    flex
+                    min-w-0
+                    flex-col
+                    gap-0.5
+                    sm:gap-1.5
+                "
             >
                 <label
                     htmlFor="dob"
                     className="
-                    text-[10px]
-                    font-medium
-                    text-white/60
-
-                    sm:text-xs
-                "
+                        text-[9px]
+                        font-medium
+                        text-white/60
+                        sm:text-xs
+                    "
                 >
                     Date of birth
                 </label>
@@ -263,33 +254,33 @@ export default function RegisterForm() {
                     }
                     disabled={loading}
                     className="
-                    box-border
-                    h-8
-                    w-full
-                    min-w-0
-                    max-w-full
-                    rounded-xl
-                    border
-                    border-white/10
-                    bg-white/[0.035]
-                    px-3
-                    text-xs
-                    text-white
-                    outline-none
-                    backdrop-blur-xl
-                    transition-all
-                    duration-300
-                    focus:border-cyan-300/30
-                    focus:bg-white/[0.055]
-                    focus:ring-1
-                    focus:ring-cyan-300/10
-                    disabled:cursor-not-allowed
-                    disabled:opacity-40
-
-                    sm:h-10
-                    sm:px-3.5
-                    sm:text-sm
-                "
+                        box-border
+                        h-7
+                        w-full
+                        min-w-0
+                        max-w-full
+                        rounded-lg
+                        border
+                        border-white/10
+                        bg-white/[0.035]
+                        px-2.5
+                        text-[11px]
+                        text-white
+                        outline-none
+                        backdrop-blur-xl
+                        transition-all
+                        duration-300
+                        focus:border-cyan-300/30
+                        focus:bg-white/[0.055]
+                        focus:ring-1
+                        focus:ring-cyan-300/10
+                        disabled:cursor-not-allowed
+                        disabled:opacity-40
+                        sm:h-10
+                        sm:rounded-xl
+                        sm:px-3.5
+                        sm:text-sm
+                    "
                 />
             </div>
 
@@ -298,41 +289,40 @@ export default function RegisterForm() {
                 <p
                     role="alert"
                     className="
-                    w-full
-                    min-w-0
-                    max-w-full
-                    break-words
-                    rounded-lg
-                    border
-                    border-red-400/10
-                    bg-red-400/[0.04]
-                    px-2.5
-                    py-1
-                    text-[10px]
-                    leading-4
-                    text-red-300/90
-
-                    sm:px-3
-                    sm:py-1.5
-                    sm:text-xs
-                    sm:leading-5
-                "
+                        w-full
+                        min-w-0
+                        max-w-full
+                        break-words
+                        rounded-md
+                        border
+                        border-red-400/10
+                        bg-red-400/[0.04]
+                        px-2
+                        py-0.5
+                        text-[9px]
+                        leading-3.5
+                        text-red-300/90
+                        sm:rounded-lg
+                        sm:px-3
+                        sm:py-1.5
+                        sm:text-xs
+                        sm:leading-5
+                    "
                 >
                     {error}
                 </p>
             )}
 
-
             {/* Continue */}
             <div
                 className="
-                flex
-                w-full
-                min-w-0
-                justify-center
-                pt-0.5
-                sm:pt-1
-            "
+                    flex
+                    w-full
+                    min-w-0
+                    justify-center
+                    pt-0
+                    sm:pt-1
+                "
             >
                 <Button
                     type="submit"
@@ -340,17 +330,32 @@ export default function RegisterForm() {
                     size="md"
                     loading={loading}
                     className="
-                    max-w-full
-                    shrink
-                "
+                        max-w-full
+                        shrink
+                        scale-90
+                        sm:scale-100
+                    "
                 >
                     Continue
                 </Button>
             </div>
 
             {/* Login */}
-            <div className="flex items-center justify-center gap-1.5 text-xs">
-                <span className="text-white/35">
+            <div
+                className="
+                    flex
+                    flex-wrap
+                    items-center
+                    justify-center
+                    gap-1
+                    px-1
+                    text-[9px]
+                    leading-4
+                    sm:gap-1.5
+                    sm:text-xs
+                "
+            >
+                <span className="text-center text-white/35">
                     Already have a SOUL account?
                 </span>
 
@@ -359,18 +364,17 @@ export default function RegisterForm() {
                     onClick={() => router.push("/login")}
                     disabled={loading}
                     className="
-                    text-cyan-300/80
-                    transition-colors
-                    hover:text-cyan-200
-                    disabled:cursor-not-allowed
-                    disabled:opacity-40
-                "
+                        shrink-0
+                        text-cyan-300/80
+                        transition-colors
+                        hover:text-cyan-200
+                        disabled:cursor-not-allowed
+                        disabled:opacity-40
+                    "
                 >
                     Sign in
                 </button>
             </div>
-
-
         </form>
     );
 }
