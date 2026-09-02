@@ -1,42 +1,40 @@
+
 @import "tailwindcss";
 
 /* =========================================================
-   GLOBAL RESET
+   SOUL AI — GLOBAL CSS
    ========================================================= */
 
 :root {
     color-scheme: dark;
+
     --soul-bg: #000;
     --soul-text: #fff;
+
     --soul-cyan: 103, 232, 249;
     --soul-purple: 168, 85, 247;
 }
 
-html {
+html,
+body {
     width: 100%;
+    min-width: 0;
     min-height: 100%;
     margin: 0;
     padding: 0;
 
-    overflow-x: hidden;
-
     background: var(--soul-bg);
+    color: var(--soul-text);
 
+    overflow-x: hidden;
+}
+
+html {
     scroll-behavior: smooth;
 }
 
 body {
-    width: 100%;
-    min-width: 0;
     min-height: 100dvh;
-
-    margin: 0;
-    padding: 0;
-
-    overflow-x: hidden;
-
-    background: var(--soul-bg);
-    color: var(--soul-text);
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -61,8 +59,8 @@ button {
     touch-action: manipulation;
 }
 
-textarea,
-input {
+input,
+textarea {
     min-width: 0;
 }
 
@@ -70,6 +68,7 @@ img,
 svg,
 video,
 canvas {
+    display: block;
     max-width: 100%;
 }
 
@@ -94,25 +93,31 @@ canvas {
     isolation: isolate;
 }
 
+
+/* =========================================================
+   CHAT PAGE
+   ========================================================= */
+
 /*
- * Use this on the actual chat page wrapper.
- *
  * IMPORTANT:
- * This prevents body/page scrolling.
- * Only the message area should scroll.
+ *
+ * Chat page itself never scrolls.
+ * Header + messages + footer live inside this layout.
+ * Only .soul-chat-scroll should scroll.
  */
 
 .soul-chat-page {
     position: relative;
 
+    display: flex;
+    flex-direction: column;
+
     width: 100%;
     height: 100dvh;
     min-height: 100dvh;
+    min-width: 0;
 
     overflow: hidden;
-
-    display: flex;
-    flex-direction: column;
 
     isolation: isolate;
 }
@@ -120,8 +125,11 @@ canvas {
 .soul-chat-content {
     position: relative;
 
+    display: flex;
     flex: 1 1 auto;
+    flex-direction: column;
 
+    width: 100%;
     min-width: 0;
     min-height: 0;
 
@@ -129,6 +137,10 @@ canvas {
 }
 
 .soul-chat-scroll {
+    position: relative;
+
+    flex: 1 1 auto;
+
     width: 100%;
     height: 100%;
 
@@ -139,6 +151,7 @@ canvas {
     overflow-y: auto;
 
     overscroll-behavior-y: contain;
+    overscroll-behavior-x: none;
 
     -webkit-overflow-scrolling: touch;
 
@@ -155,6 +168,9 @@ canvas {
    ========================================================= */
 
 .soul-scroll {
+    min-width: 0;
+    min-height: 0;
+
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -169,15 +185,15 @@ canvas {
 
 
 /* =========================================================
-   SAFE MOBILE AREA
+   SAFE AREAS
    ========================================================= */
-
-.soul-safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-}
 
 .soul-safe-top {
     padding-top: env(safe-area-inset-top);
+}
+
+.soul-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 
@@ -231,8 +247,6 @@ canvas {
 
     left: 50%;
     top: 45%;
-
-    transform: translate3d(-50%, -50%, 0);
 
     background:
         radial-gradient(
@@ -659,23 +673,16 @@ canvas {
    HERO
    ========================================================= */
 
-/*
- * New Hero system:
- *
- * centered vertically on desktop
- * slightly higher on mobile
- * no accidental page overflow
- */
-
 .soul-hero {
     position: relative;
-
-    width: 100%;
-    min-height: 100dvh;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    width: 100%;
+    min-height: 100dvh;
+    min-width: 0;
 
     overflow: hidden;
 
@@ -692,11 +699,12 @@ canvas {
 
     z-index: 10;
 
-    width: min(100%, 820px);
-
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    width: min(100%, 820px);
+    min-width: 0;
 
     text-align: center;
 }
@@ -747,15 +755,23 @@ canvas {
 
 
 /* =========================================================
-   HERO → CHAT TRANSITION
+   HERO → CHAT
    ========================================================= */
 
 .soul-hero-exit {
-    animation: soul-hero-exit 450ms cubic-bezier(.22, 1, .36, 1) both;
+    animation:
+        soul-hero-exit
+        450ms
+        cubic-bezier(.22, 1, .36, 1)
+        both;
 }
 
 .soul-chat-enter {
-    animation: soul-chat-enter 450ms cubic-bezier(.22, 1, .36, 1) both;
+    animation:
+        soul-chat-enter
+        450ms
+        cubic-bezier(.22, 1, .36, 1)
+        both;
 }
 
 @keyframes soul-hero-exit {
@@ -790,7 +806,11 @@ canvas {
 .soul-logo-breathe {
     position: relative;
 
-    animation: soul-logo-breathe 5s ease-in-out infinite;
+    animation:
+        soul-logo-breathe
+        5s
+        ease-in-out
+        infinite;
 
     will-change: transform;
 }
@@ -817,7 +837,11 @@ canvas {
 
     filter: blur(12px);
 
-    animation: soul-logo-orbit 12s linear infinite;
+    animation:
+        soul-logo-orbit
+        12s
+        linear
+        infinite;
 }
 
 
@@ -828,39 +852,73 @@ canvas {
 .soul-bubble {
     position: relative;
 
+    min-width: 0;
+
     perspective: 800px;
 }
 
 .soul-bubble-body {
-    animation: soul-bubble-breathe 5s ease-in-out infinite;
+    animation:
+        soul-bubble-breathe
+        5s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-aura {
-    animation: soul-aura-breathe 6s ease-in-out infinite;
+    animation:
+        soul-aura-breathe
+        6s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-liquid {
-    animation: soul-liquid-blob 7s ease-in-out infinite;
+    animation:
+        soul-liquid-blob
+        7s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-liquid-reverse {
-    animation: soul-liquid-blob-reverse 9s ease-in-out infinite;
+    animation:
+        soul-liquid-blob-reverse
+        9s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-pink {
-    animation: soul-pink-float 8s ease-in-out infinite;
+    animation:
+        soul-pink-float
+        8s
+        ease-in-out
+        infinite;
 }
 
 .soul-core {
-    animation: soul-core-breathe 4s ease-in-out infinite;
+    animation:
+        soul-core-breathe
+        4s
+        ease-in-out
+        infinite;
 }
 
 .soul-core-light {
-    animation: soul-core-pulse 2.5s ease-in-out infinite;
+    animation:
+        soul-core-pulse
+        2.5s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-shine {
-    animation: soul-bubble-shine 7s ease-in-out infinite;
+    animation:
+        soul-bubble-shine
+        7s
+        ease-in-out
+        infinite;
 }
 
 
@@ -873,11 +931,16 @@ canvas {
 
     z-index: 20;
 
+    min-width: 0;
+    max-width: 30vw;
+
     pointer-events: auto;
 }
 
 .soul-action-bubble {
     position: relative;
+
+    min-width: 0;
 
     transition: filter 250ms ease;
 }
@@ -916,15 +979,27 @@ canvas {
 }
 
 .soul-bubble-content {
-    animation: soul-content-glow 4s ease-in-out infinite;
+    animation:
+        soul-content-glow
+        4s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-content-label {
-    animation: soul-label-blink 4s ease-in-out infinite;
+    animation:
+        soul-label-blink
+        4s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-content-description {
-    animation: soul-description-blink 6s ease-in-out infinite;
+    animation:
+        soul-description-blink
+        6s
+        ease-in-out
+        infinite;
 }
 
 
@@ -936,56 +1011,82 @@ canvas {
     left: 50%;
     top: 50%;
 
-    transform: translate3d(-50%, -50%, 0);
-
-    animation: soul-position-main 7s ease-in-out infinite;
+    animation:
+        soul-position-main
+        7s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-one {
     left: 15%;
     top: 20%;
 
-    animation: soul-position-one 9s ease-in-out infinite;
+    animation:
+        soul-position-one
+        9s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-two {
     right: 14%;
     top: 17%;
 
-    animation: soul-position-two 11s ease-in-out infinite;
+    animation:
+        soul-position-two
+        11s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-three {
     left: 7%;
     top: 52%;
 
-    animation: soul-position-three 10s ease-in-out infinite;
+    animation:
+        soul-position-three
+        10s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-four {
     right: 8%;
     top: 53%;
 
-    animation: soul-position-four 8s ease-in-out infinite;
+    animation:
+        soul-position-four
+        8s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-five {
     left: 22%;
     bottom: 12%;
 
-    animation: soul-position-five 12s ease-in-out infinite;
+    animation:
+        soul-position-five
+        12s
+        ease-in-out
+        infinite;
 }
 
 .soul-bubble-six {
     right: 23%;
     bottom: 14%;
 
-    animation: soul-position-six 10s ease-in-out infinite;
+    animation:
+        soul-position-six
+        10s
+        ease-in-out
+        infinite;
 }
 
 
 /* =========================================================
-   CHAT LAYOUT
+   CHAT HEADER
    ========================================================= */
 
 .soul-chat-header {
@@ -993,9 +1094,10 @@ canvas {
 
     z-index: 30;
 
-    flex-shrink: 0;
+    flex: 0 0 auto;
 
     width: 100%;
+    min-width: 0;
 
     padding:
         max(12px, env(safe-area-inset-top))
@@ -1003,27 +1105,40 @@ canvas {
         10px;
 }
 
+
+/* =========================================================
+   CHAT MESSAGES
+   ========================================================= */
+
 .soul-chat-messages {
     width: 100%;
     max-width: 860px;
+
+    min-width: 0;
 
     margin: 0 auto;
 
     padding:
         20px 16px
         28px;
-
-    min-height: 100%;
 }
+
+
+/* =========================================================
+   CHAT FOOTER
+   ========================================================= */
 
 .soul-chat-footer {
     position: relative;
 
     z-index: 30;
 
-    flex-shrink: 0;
+    flex: 0 0 auto;
 
     width: 100%;
+    min-width: 0;
+
+    overflow: hidden;
 
     padding:
         8px
@@ -1039,6 +1154,7 @@ canvas {
 .soul-composer {
     width: 100%;
     max-width: 760px;
+    min-width: 0;
 
     margin: 0 auto;
 }
@@ -1048,11 +1164,14 @@ canvas {
 
     isolation: isolate;
 
+    width: 100%;
+    min-width: 0;
+
     overflow: hidden;
 
-    width: 100%;
-
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
 
     border-radius: 28px;
 
@@ -1067,8 +1186,10 @@ canvas {
     -webkit-backdrop-filter: blur(22px) saturate(140%);
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.10),
-        0 20px 70px rgba(0, 0, 0, 0.35);
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.10),
+        0 20px 70px
+        rgba(0, 0, 0, 0.35);
 
     transition:
         border-color 200ms ease,
@@ -1076,12 +1197,16 @@ canvas {
 }
 
 .soul-chat-input:focus-within {
-    border-color: rgba(103, 232, 249, 0.20);
+    border-color:
+        rgba(103, 232, 249, 0.20);
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.12),
-        0 0 45px rgba(34, 211, 238, 0.05),
-        0 20px 70px rgba(0, 0, 0, 0.35);
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.12),
+        0 0 45px
+        rgba(34, 211, 238, 0.05),
+        0 20px 70px
+        rgba(0, 0, 0, 0.35);
 }
 
 .soul-chat-input-inner {
@@ -1090,23 +1215,26 @@ canvas {
     z-index: 2;
 
     display: flex;
-
     align-items: flex-end;
 
     gap: 8px;
 
     width: 100%;
+    min-width: 0;
 }
 
 .soul-textarea {
     display: block;
 
-    width: 100%;
+    flex: 1 1 auto;
 
+    width: 100%;
+    min-width: 0;
     min-height: 48px;
     max-height: 160px;
 
-    padding: 10px 12px;
+    padding:
+        10px 12px;
 
     border: 0;
     outline: 0;
@@ -1125,7 +1253,10 @@ canvas {
 
     scrollbar-width: none;
 
+    overscroll-behavior: contain;
+
     -webkit-appearance: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .soul-textarea::-webkit-scrollbar {
@@ -1170,7 +1301,11 @@ canvas {
             transparent
         );
 
-    animation: soul-input-shine 10s ease-in-out infinite;
+    animation:
+        soul-input-shine
+        10s
+        ease-in-out
+        infinite;
 }
 
 
@@ -1181,20 +1316,25 @@ canvas {
 .soul-send {
     position: relative;
 
-    flex-shrink: 0;
+    flex: 0 0 auto;
 
     width: 44px;
     height: 44px;
+    min-width: 44px;
 
-    border: 1px solid rgba(255, 255, 255, 0.11);
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.11);
 
-    background: rgba(255, 255, 255, 0.065);
+    background:
+        rgba(255, 255, 255, 0.065);
 
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.10);
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.10);
 
     transition:
         transform 160ms ease,
@@ -1203,15 +1343,21 @@ canvas {
 }
 
 .soul-send:not(:disabled) {
-    animation: soul-send-pulse 4s ease-in-out infinite;
+    animation:
+        soul-send-pulse
+        4s
+        ease-in-out
+        infinite;
 }
 
 .soul-send:hover:not(:disabled) {
     transform: scale(1.04);
 
-    border-color: rgba(103, 232, 249, 0.22);
+    border-color:
+        rgba(103, 232, 249, 0.22);
 
-    background: rgba(255, 255, 255, 0.10);
+    background:
+        rgba(255, 255, 255, 0.10);
 }
 
 .soul-send:active:not(:disabled) {
@@ -1233,7 +1379,11 @@ canvas {
 }
 
 .soul-small-core {
-    animation: soul-small-core 4s ease-in-out infinite;
+    animation:
+        soul-small-core
+        4s
+        ease-in-out
+        infinite;
 }
 
 
@@ -1242,23 +1392,28 @@ canvas {
    ========================================================= */
 
 .soul-user-message {
-    width: 100%;
-
     display: flex;
+
+    width: 100%;
+    min-width: 0;
+
     justify-content: flex-end;
 }
 
 .soul-user-message-content {
     width: fit-content;
     max-width: min(90%, 680px);
-
     min-width: 0;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .soul-assistant-message {
-    width: 100%;
-
     display: flex;
+
+    width: 100%;
+    min-width: 0;
 
     align-items: flex-start;
 
@@ -1266,9 +1421,11 @@ canvas {
 }
 
 .soul-assistant-message-content {
+    width: min(100%, 760px);
     min-width: 0;
 
-    width: min(100%, 760px);
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 
@@ -1287,19 +1444,29 @@ canvas {
     align-items: center;
     justify-content: center;
 
+    width: 100%;
+    height: 100dvh;
+
     padding:
         max(8px, env(safe-area-inset-top))
         8px
         max(8px, env(safe-area-inset-bottom));
 
-    background: rgba(0, 0, 0, 0.72);
+    background:
+        rgba(0, 0, 0, 0.72);
 
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+
+    overscroll-behavior: contain;
 }
 
 .soul-feedback-modal {
+    display: flex;
+    flex-direction: column;
+
     width: min(100%, 448px);
+    max-width: 448px;
 
     max-height:
         calc(
@@ -1309,8 +1476,7 @@ canvas {
             - 16px
         );
 
-    display: flex;
-    flex-direction: column;
+    min-height: 0;
 
     overflow: hidden;
 
@@ -1328,23 +1494,28 @@ canvas {
 }
 
 .soul-feedback-content {
-    min-height: 0;
-
     flex: 1 1 auto;
+
+    min-height: 0;
 
     overflow-x: hidden;
     overflow-y: auto;
+
+    overscroll-behavior: contain;
 
     -webkit-overflow-scrolling: touch;
 }
 
 
 /* =========================================================
-   CODE / HISTORY SCROLL
+   CODE SCROLL
    ========================================================= */
 
 .soul-code-scroll {
+    max-width: 100%;
+
     overflow-x: auto;
+    overflow-y: hidden;
 
     scrollbar-width: thin;
 
@@ -1362,19 +1533,33 @@ canvas {
 }
 
 .soul-code-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background:
+        rgba(255, 255, 255, 0.15);
 
     border-radius: 999px;
 }
 
+
+/* =========================================================
+   HISTORY SCROLL
+   ========================================================= */
+
 .soul-history-scroll {
+    min-width: 0;
+    min-height: 0;
+
+    overflow-x: hidden;
     overflow-y: auto;
+
+    overscroll-behavior: contain;
 
     scrollbar-width: thin;
 
     scrollbar-color:
         rgba(255, 255, 255, 0.10)
         transparent;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .soul-history-scroll::-webkit-scrollbar {
@@ -1386,14 +1571,15 @@ canvas {
 }
 
 .soul-history-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.10);
+    background:
+        rgba(255, 255, 255, 0.10);
 
     border-radius: 999px;
 }
 
 
 /* =========================================================
-   DESKTOP POSITION ANIMATIONS
+   BACKGROUND ANIMATIONS
    ========================================================= */
 
 @keyframes soul-breathe {
@@ -1416,33 +1602,41 @@ canvas {
 
 @keyframes soul-float-one {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(80px, 60px, 0);
+        transform:
+            translate3d(80px, 60px, 0);
     }
 }
 
 @keyframes soul-float-two {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(-70px, -50px, 0);
+        transform:
+            translate3d(-70px, -50px, 0);
     }
 }
 
 @keyframes soul-twinkle {
     0%, 100% {
         opacity: 0.15;
-        transform: scale(0.7);
+
+        transform:
+            scale(0.7);
     }
 
     50% {
         opacity: 0.8;
-        transform: scale(1.4);
+
+        transform:
+            scale(1.4);
     }
 }
 
@@ -1542,42 +1736,57 @@ canvas {
 
 @keyframes soul-logo-breathe {
     0%, 100% {
-        transform: scale(1);
+        transform:
+            scale(1);
     }
 
     50% {
-        transform: scale(1.045);
+        transform:
+            scale(1.045);
     }
 }
 
 @keyframes soul-logo-orbit {
     from {
-        transform: rotate(0deg);
+        transform:
+            rotate(0deg);
     }
 
     to {
-        transform: rotate(360deg);
+        transform:
+            rotate(360deg);
     }
 }
 
+
+/* =========================================================
+   BUBBLE ANIMATIONS
+   ========================================================= */
+
 @keyframes soul-bubble-breathe {
     0%, 100% {
-        transform: scale(0.96);
+        transform:
+            scale(0.96);
     }
 
     50% {
-        transform: scale(1.035);
+        transform:
+            scale(1.035);
     }
 }
 
 @keyframes soul-aura-breathe {
     0%, 100% {
-        transform: scale(0.9);
+        transform:
+            scale(0.9);
+
         opacity: 0.55;
     }
 
     50% {
-        transform: scale(1.12);
+        transform:
+            scale(1.12);
+
         opacity: 0.95;
     }
 }
@@ -1661,12 +1870,16 @@ canvas {
 
 @keyframes soul-core-pulse {
     0%, 100% {
-        transform: scale(0.75);
+        transform:
+            scale(0.75);
+
         opacity: 0.75;
     }
 
     50% {
-        transform: scale(1.2);
+        transform:
+            scale(1.2);
+
         opacity: 1;
     }
 }
@@ -1689,7 +1902,7 @@ canvas {
 
 
 /* =========================================================
-   BUBBLE POSITION KEYFRAMES
+   BUBBLE POSITION ANIMATIONS
    ========================================================= */
 
 @keyframes soul-position-main {
@@ -1738,21 +1951,25 @@ canvas {
 
 @keyframes soul-position-three {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(22px, -18px, 0);
+        transform:
+            translate3d(22px, -18px, 0);
     }
 }
 
 @keyframes soul-position-four {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(-20px, 20px, 0);
+        transform:
+            translate3d(-20px, 20px, 0);
     }
 }
 
@@ -1889,11 +2106,13 @@ canvas {
 
 @keyframes soul-small-core {
     0%, 100% {
-        transform: scale(0.96);
+        transform:
+            scale(0.96);
     }
 
     50% {
-        transform: scale(1.04);
+        transform:
+            scale(1.04);
     }
 }
 
@@ -1908,13 +2127,18 @@ canvas {
         scroll-behavior: auto;
     }
 
+    body {
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    /* -----------------------------------------
+       Background
+       ----------------------------------------- */
+
     .soul-background {
         height: 100dvh;
     }
-
-    /*
-     * Much cheaper effects on mobile.
-     */
 
     .soul-orb-main {
         width: 300px;
@@ -2007,8 +2231,6 @@ canvas {
     .soul-hero {
         min-height: 100dvh;
 
-        align-items: center;
-
         padding:
             max(20px, env(safe-area-inset-top))
             16px
@@ -2017,6 +2239,7 @@ canvas {
 
     .soul-hero-inner {
         width: 100%;
+        min-width: 0;
     }
 
     .soul-hero-logo {
@@ -2026,11 +2249,12 @@ canvas {
     .soul-hero-title {
         max-width: 360px;
 
-        font-size: clamp(
-            2.5rem,
-            13vw,
-            4rem
-        );
+        font-size:
+            clamp(
+                2.5rem,
+                13vw,
+                4rem
+            );
 
         line-height: 0.95;
     }
@@ -2056,7 +2280,7 @@ canvas {
        ----------------------------------------- */
 
     .soul-action-position {
-        max-width: 30vw;
+        max-width: 25vw;
     }
 
     .soul-action-bubble:hover {
@@ -2146,8 +2370,15 @@ canvas {
 
 
     /* -----------------------------------------
-       Chat
+       Chat page
        ----------------------------------------- */
+
+    .soul-chat-page {
+        height: 100dvh;
+        min-height: 100dvh;
+
+        overflow: hidden;
+    }
 
     .soul-chat-header {
         padding:
@@ -2168,33 +2399,52 @@ canvas {
             max(10px, env(safe-area-inset-bottom));
     }
 
+
+    /* -----------------------------------------
+       Composer
+       ----------------------------------------- */
+
     .soul-chat-input {
         border-radius: 23px;
 
-        backdrop-filter: blur(16px) saturate(125%);
-        -webkit-backdrop-filter: blur(16px) saturate(125%);
+        backdrop-filter:
+            blur(16px)
+            saturate(125%);
+
+        -webkit-backdrop-filter:
+            blur(16px)
+            saturate(125%);
+    }
+
+    .soul-chat-input-inner {
+        gap: 6px;
     }
 
     .soul-textarea {
         min-height: 46px;
+        max-height: 140px;
 
         padding:
             9px 10px;
 
         font-size: 16px;
-
         line-height: 1.6;
     }
 
     .soul-send {
         width: 42px;
         height: 42px;
+        min-width: 42px;
     }
 
 
     /* -----------------------------------------
        Messages
        ----------------------------------------- */
+
+    .soul-user-message {
+        min-width: 0;
+    }
 
     .soul-user-message-content {
         max-width: 90%;
@@ -2206,11 +2456,12 @@ canvas {
 
     .soul-assistant-message-content {
         width: calc(100% - 42px);
+        max-width: calc(100% - 42px);
     }
 
 
     /* -----------------------------------------
-       Feedback
+       Feedback modal
        ----------------------------------------- */
 
     .soul-feedback-overlay {
@@ -2224,6 +2475,7 @@ canvas {
 
     .soul-feedback-modal {
         width: 100%;
+        max-width: 100%;
 
         max-height:
             calc(
@@ -2262,61 +2514,73 @@ canvas {
 
 @keyframes soul-mobile-left-top {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(8px, -10px, 0);
+        transform:
+            translate3d(8px, -10px, 0);
     }
 }
 
 @keyframes soul-mobile-right-top {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(-8px, 8px, 0);
+        transform:
+            translate3d(-8px, 8px, 0);
     }
 }
 
 @keyframes soul-mobile-left-middle {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(8px, -8px, 0);
+        transform:
+            translate3d(8px, -8px, 0);
     }
 }
 
 @keyframes soul-mobile-right-middle {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(-8px, -8px, 0);
+        transform:
+            translate3d(-8px, -8px, 0);
     }
 }
 
 @keyframes soul-mobile-left-bottom {
     0%, 100% {
-        transform: translate3d(0, 0, 0);
+        transform:
+            translate3d(0, 0, 0);
     }
 
     50% {
-        transform: translate3d(8px, -8px, 0);
+        transform:
+            translate3d(8px, -8px, 0);
     }
 }
 
 @keyframes soul-mobile-right-bottom {
     0%, 100% {
-        transform: translate3d(-0, 0, 0);
+        transform:
+            translate3d(-0px, 0, 0);
     }
 
     50% {
-        transform: translate3d(-8px, -8px, 0);
+        transform:
+            translate3d(-8px, -8px, 0);
     }
 }
 
@@ -2346,13 +2610,33 @@ canvas {
 }
 
 
-.soul-action-position {
-    min-width: 0;
-    max-width: 30vw;
-}
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
 
-@media (max-width: 640px) {
-    .soul-action-position {
-        max-width: 25vw;
+@media (max-width: 380px) {
+
+    .soul-chat-footer {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    .soul-chat-input {
+        border-radius: 21px;
+    }
+
+    .soul-textarea {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .soul-send {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .soul-user-message-content {
+        max-width: 92%;
     }
 }

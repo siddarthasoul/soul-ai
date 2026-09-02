@@ -122,49 +122,50 @@ export default function Hero() {
     };
 
     return (
-        <section className="relative h-full w-full overflow-hidden">
+        <section className="fixed inset-0 h-[100dvh] w-full overflow-hidden bg-black">
+            {/* BACKGROUND */}
 
-            {/* COLOR FIELD */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                >
+                    <div className="soul-color-field">
+                        <div className="soul-color soul-color-violet" />
+                        <div className="soul-color soul-color-cyan" />
+                        <div className="soul-color soul-color-pink" />
+                    </div>
 
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 overflow-hidden"
-            >
-                <div className="soul-color-field">
-                    <div className="soul-color soul-color-violet" />
-                    <div className="soul-color soul-color-cyan" />
-                    <div className="soul-color soul-color-pink" />
+                    <div
+                        className="
+                            soul-liquid-glow
+                            soul-liquid-blue
+                            -left-32
+                            top-1/4
+                        "
+                    />
+
+                    <div
+                        className="
+                            soul-liquid-glow
+                            soul-liquid-purple
+                            -right-40
+                            top-1/3
+                        "
+                    />
+
+                    <div
+                        className="
+                            soul-liquid-glow
+                            soul-liquid-pink
+                            bottom-[-180px]
+                            left-1/2
+                        "
+                    />
                 </div>
-
-                <div
-                    className="
-                        soul-liquid-glow
-                        soul-liquid-blue
-                        -left-32
-                        top-1/4
-                    "
-                />
-
-                <div
-                    className="
-                        soul-liquid-glow
-                        soul-liquid-purple
-                        -right-40
-                        top-1/3
-                    "
-                />
-
-                <div
-                    className="
-                        soul-liquid-glow
-                        soul-liquid-pink
-                        bottom-[-180px]
-                        left-1/2
-                    "
-                />
             </div>
 
-            {/* BUBBLE CANVAS */}
+            {/* BUBBLE AREA */}
 
             <div className="absolute inset-0 overflow-hidden">
 
@@ -172,8 +173,6 @@ export default function Hero() {
 
                 <div
                     className="
-                        soul-action-position
-                        soul-bubble-main
                         absolute
                         left-1/2
                         top-1/2
@@ -198,31 +197,20 @@ export default function Hero() {
                     />
                 </div>
 
-                {/* DECORATIVE 1 */}
+                {/* REGISTER */}
 
                 <div
                     className="
-                        soul-action-position
-                        soul-bubble-one
                         absolute
-                        left-[8%]
-                        top-[22%]
-                        z-10
-                    "
-                >
-                    <SoulActionBubble size="sm" />
-                </div>
-
-                {/* REGISTER / USER */}
-
-                <div
-                    className="
-                        soul-action-position
-                        soul-bubble-two
-                        absolute
-                        right-[9%]
-                        top-[18%]
+                        right-[8vw]
+                        top-[16vh]
                         z-20
+
+                        sm:right-[10vw]
+                        sm:top-[18vh]
+
+                        lg:right-[14vw]
+                        lg:top-[20vh]
                     "
                 >
                     <SoulActionBubble
@@ -251,53 +239,20 @@ export default function Hero() {
                     />
                 </div>
 
-                {/* FEEDBACK */}
-
-                <div
-                    className="
-                        soul-action-position
-                        soul-bubble-three
-                        absolute
-                        bottom-[16%]
-                        left-[10%]
-                        z-20
-                    "
-                >
-                    <SoulActionBubble
-                        size="md"
-                        label="Feedback"
-                        description="Share your experience"
-                        onClick={() =>
-                            router.push("/feedback")
-                        }
-                    />
-                </div>
-
-                {/* DECORATIVE 2 */}
-
-                <div
-                    className="
-                        soul-action-position
-                        soul-bubble-four
-                        absolute
-                        bottom-[18%]
-                        right-[8%]
-                        z-10
-                    "
-                >
-                    <SoulActionBubble size="sm" />
-                </div>
-
                 {/* LOGIN */}
 
                 <div
                     className="
-                        soul-action-position
-                        soul-bubble-five
                         absolute
-                        left-[7%]
-                        top-[48%]
+                        left-[8vw]
+                        top-[46vh]
                         z-20
+
+                        sm:left-[10vw]
+                        sm:top-[48vh]
+
+                        lg:left-[14vw]
+                        lg:top-[50vh]
                     "
                 >
                     <SoulActionBubble
@@ -331,19 +286,74 @@ export default function Hero() {
                     />
                 </div>
 
-                {/* DECORATIVE 3 */}
+                {/* FEEDBACK */}
 
                 <div
                     className="
-                        soul-action-position
-                        soul-bubble-six
                         absolute
-                        right-[7%]
-                        top-[50%]
-                        z-10
+                        bottom-[12vh]
+                        left-[10vw]
+                        z-20
+
+                        sm:bottom-[14vh]
+                        sm:left-[16vw]
+
+                        lg:bottom-[16vh]
+                        lg:left-[22vw]
                     "
                 >
-                    <SoulActionBubble size="md" />
+                    <SoulActionBubble
+                        size="md"
+                        label="Feedback"
+                        description="Share your experience"
+                        onClick={() =>
+                            router.push("/feedback")
+                        }
+                    />
+                </div>
+
+                {/* DECORATIVE BUBBLE */}
+
+                <div
+                    className="
+                        absolute
+                        bottom-[14vh]
+                        right-[10vw]
+                        z-10
+
+                        sm:bottom-[17vh]
+                        sm:right-[16vw]
+
+                        lg:bottom-[20vh]
+                        lg:right-[22vw]
+
+                        hidden
+                        sm:block
+                    "
+                >
+                    <SoulActionBubble size="sm" />
+                </div>
+
+                {/* DECORATIVE BUBBLE */}
+
+                <div
+                    className="
+                        absolute
+                        left-[7vw]
+                        top-[20vh]
+                        z-10
+
+                        sm:left-[16vw]
+                        sm:top-[24vh]
+
+                        lg:left-[22vw]
+                        lg:top-[27vh]
+
+                        hidden
+                        md:block
+                    "
+                >
+                    <SoulActionBubble size="sm" />
                 </div>
             </div>
         </section>
