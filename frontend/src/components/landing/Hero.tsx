@@ -5,11 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import SoulActionBubble from "@/src/components/landing/SoulActionBubble";
-
 import chatService from "@/src/services/chat.service";
-
 import apiClient from "@/src/lib/api/client";
-
 import { useChatStore } from "@/src/stores/chat.store";
 
 interface CurrentUser {
@@ -21,47 +18,30 @@ interface CurrentUser {
 export default function Hero() {
     const router = useRouter();
 
-    const [chatLoading, setChatLoading] =
-        useState(false);
+    const [chatLoading, setChatLoading] = useState(false);
+    const [user, setUser] = useState<CurrentUser | null>(null);
+    const [authLoading, setAuthLoading] = useState(true);
 
-    const [user, setUser] =
-        useState<CurrentUser | null>(null);
+    const setRateLimit = useChatStore(
+        (state) => state.setRateLimit
+    );
 
-    const [authLoading, setAuthLoading] =
-        useState(true);
-
-    const setRateLimit =
-        useChatStore(
-            (state) => state.setRateLimit
-        );
-
-    const clearChat =
-        useChatStore(
-            (state) => state.clearChat
-        );
-
-    /*
-     * ------------------------------------------------------------
-     * AUTHENTICATION
-     * ------------------------------------------------------------
-     */
+    const clearChat = useChatStore(
+        (state) => state.clearChat
+    );
 
     useEffect(() => {
         let mounted = true;
 
         const checkAuth = async () => {
             try {
-                const response =
-                    await apiClient.get(
-                        "/api/v1/users/me"
-                    );
+                const response = await apiClient.get(
+                    "/api/v1/users/me"
+                );
 
-                const currentUser =
-                    response.data?.data;
+                const currentUser = response.data?.data;
 
-                if (!mounted) {
-                    return;
-                }
+                if (!mounted) return;
 
                 if (currentUser) {
                     setUser({
@@ -90,53 +70,25 @@ export default function Hero() {
         };
     }, []);
 
-    const isLoggedIn =
-        Boolean(user);
+    const isLoggedIn = Boolean(user);
 
     const userLabel =
         user?.name?.trim() ||
         user?.email?.split("@")[0] ||
         "You";
 
-    /*
-     * ------------------------------------------------------------
-     * CREATE CHAT
-     * ------------------------------------------------------------
-     *
-     * IMPORTANT:
-     *
-     * Conversation creation does NOT consume the limit.
-     *
-     * Backend returns:
-     *
-     * {
-     *   conversation,
-     *   rateLimit
-     * }
-     *
-     * We store rateLimit before opening ChatPage.
-     *
-     * Therefore ChatPage already knows whether the user
-     * has messages remaining.
-     */
-
     const openChat = async () => {
-        if (chatLoading) {
-            return;
-        }
+        if (chatLoading) return;
 
         try {
             setChatLoading(true);
 
-            // Clear previous conversation messages
-            // from frontend memory.
             clearChat();
 
             const result =
                 await chatService.createConversation();
 
-            const conversation =
-                result.conversation;
+            const conversation = result.conversation;
 
             if (!conversation?.id) {
                 throw new Error(
@@ -145,15 +97,12 @@ export default function Hero() {
             }
 
             if (result.rateLimit) {
-                setRateLimit(
-                    result.rateLimit
-                );
+                setRateLimit(result.rateLimit);
             }
 
             router.push(
                 `/chat/${conversation.id}`
             );
-
         } catch (error) {
             console.error(
                 "[Hero] Failed to start chat:",
@@ -164,12 +113,6 @@ export default function Hero() {
         }
     };
 
-    /*
-     * ------------------------------------------------------------
-     * AUTH NAVIGATION
-     * ------------------------------------------------------------
-     */
-
     const openRegister = () => {
         router.push("/register");
     };
@@ -178,60 +121,65 @@ export default function Hero() {
         router.push("/login");
     };
 
-    /*
-     * ------------------------------------------------------------
-     * UI
-     * ------------------------------------------------------------
-     */
-
     return (
-        <main className="relative min-h-dvh overflow-hidden">
+        <section className="relative h-full w-full overflow-hidden">
+
+            {/* COLOR FIELD */}
+
             <div
                 aria-hidden="true"
-                className="soul-color-field"
+                className="pointer-events-none absolute inset-0 overflow-hidden"
             >
-                <div className="soul-color soul-color-violet" />
-                <div className="soul-color soul-color-cyan" />
-                <div className="soul-color soul-color-pink" />
+                <div className="soul-color-field">
+                    <div className="soul-color soul-color-violet" />
+                    <div className="soul-color soul-color-cyan" />
+                    <div className="soul-color soul-color-pink" />
+                </div>
+
+                <div
+                    className="
+                        soul-liquid-glow
+                        soul-liquid-blue
+                        -left-32
+                        top-1/4
+                    "
+                />
+
+                <div
+                    className="
+                        soul-liquid-glow
+                        soul-liquid-purple
+                        -right-40
+                        top-1/3
+                    "
+                />
+
+                <div
+                    className="
+                        soul-liquid-glow
+                        soul-liquid-pink
+                        bottom-[-180px]
+                        left-1/2
+                    "
+                />
             </div>
 
-            <div
-                aria-hidden="true"
-                className="
-                    soul-liquid-glow
-                    soul-liquid-blue
-                    -left-32
-                    top-1/4
-                "
-            />
+            {/* BUBBLE CANVAS */}
 
-            <div
-                aria-hidden="true"
-                className="
-                    soul-liquid-glow
-                    soul-liquid-purple
-                    -right-40
-                    top-1/3
-                "
-            />
+            <div className="absolute inset-0 overflow-hidden">
 
-            <div
-                aria-hidden="true"
-                className="
-                    soul-liquid-glow
-                    soul-liquid-pink
-                    bottom-[-180px]
-                    left-1/2
-                "
-            />
+                {/* MAIN SOUL */}
 
-            <section className="relative min-h-dvh w-full">
-
-                {/* MAIN CHAT */}
                 <div
                     className="
                         soul-action-position
                         soul-bubble-main
+                        absolute
+                        left-1/2
+                        top-1/2
+                        z-30
+                        -translate-x-1/2
+                        -translate-y-1/2
                     "
                 >
                     <SoulActionBubble
@@ -250,21 +198,31 @@ export default function Hero() {
                     />
                 </div>
 
-                {/* DECORATIVE */}
+                {/* DECORATIVE 1 */}
+
                 <div
                     className="
                         soul-action-position
                         soul-bubble-one
+                        absolute
+                        left-[8%]
+                        top-[22%]
+                        z-10
                     "
                 >
                     <SoulActionBubble size="sm" />
                 </div>
 
-                {/* ACCOUNT / UNLIMITED */}
+                {/* REGISTER / USER */}
+
                 <div
                     className="
                         soul-action-position
                         soul-bubble-two
+                        absolute
+                        right-[9%]
+                        top-[18%]
+                        z-20
                     "
                 >
                     <SoulActionBubble
@@ -293,36 +251,53 @@ export default function Hero() {
                     />
                 </div>
 
-                {/* LEARN */}
+                {/* FEEDBACK */}
+
                 <div
                     className="
                         soul-action-position
                         soul-bubble-three
+                        absolute
+                        bottom-[16%]
+                        left-[10%]
+                        z-20
                     "
                 >
                     <SoulActionBubble
                         size="md"
                         label="Feedback"
                         description="Share your experience"
-                        onClick={() => router.push("/feedback")}
+                        onClick={() =>
+                            router.push("/feedback")
+                        }
                     />
                 </div>
 
-                {/* DECORATIVE */}
+                {/* DECORATIVE 2 */}
+
                 <div
                     className="
                         soul-action-position
                         soul-bubble-four
+                        absolute
+                        bottom-[18%]
+                        right-[8%]
+                        z-10
                     "
                 >
                     <SoulActionBubble size="sm" />
                 </div>
 
-                {/* LOGIN / ACCOUNT */}
+                {/* LOGIN */}
+
                 <div
                     className="
                         soul-action-position
                         soul-bubble-five
+                        absolute
+                        left-[7%]
+                        top-[48%]
+                        z-20
                     "
                 >
                     <SoulActionBubble
@@ -356,17 +331,21 @@ export default function Hero() {
                     />
                 </div>
 
-                {/* DECORATIVE */}
+                {/* DECORATIVE 3 */}
+
                 <div
                     className="
                         soul-action-position
                         soul-bubble-six
+                        absolute
+                        right-[7%]
+                        top-[50%]
+                        z-10
                     "
                 >
                     <SoulActionBubble size="md" />
                 </div>
-
-            </section>
-        </main>
+            </div>
+        </section>
     );
 }

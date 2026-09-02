@@ -2344,3 +2344,15 @@ canvas {
         transform: none;
     }
 }
+
+
+.soul-action-position {
+    min-width: 0;
+    max-width: 30vw;
+}
+
+@media (max-width: 640px) {
+    .soul-action-position {
+        max-width: 25vw;
+    }
+}

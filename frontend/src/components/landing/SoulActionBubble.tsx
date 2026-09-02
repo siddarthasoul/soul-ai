@@ -1,3 +1,4 @@
+
 "use client";
 
 import SoulBubble from "@/src/components/ui/SoulBubble";
@@ -12,9 +13,9 @@ interface SoulActionBubbleProps {
 }
 
 const bubbleSizes = {
-    sm: "size-16",
-    md: "size-24",
-    lg: "size-36",
+    sm: "size-[clamp(3.5rem,14vw,4.5rem)]",
+    md: "size-[clamp(4.5rem,18vw,6rem)]",
+    lg: "size-[clamp(5.5rem,22vw,8rem)]",
 };
 
 export default function SoulActionBubble({
@@ -34,30 +35,31 @@ export default function SoulActionBubble({
                 soul-action-bubble
                 group
                 relative
+                min-w-0
+                shrink
                 ${bubbleSizes[size]}
                 ${className}
             `}
         >
             {/* LABEL */}
-
             {hasContent && (
                 <div
                     className="
                         pointer-events-none
                         absolute
-                        left-1/2
                         bottom-full
+                        left-1/2
                         z-50
-                        mb-3
+                        mb-2
                         flex
+                        max-w-[calc(100vw-2rem)]
                         -translate-x-1/2
                         flex-col
                         items-center
                         justify-center
-                        whitespace-nowrap
-
+                        text-center
                         opacity-100
-
+                        sm:mb-3
                         sm:opacity-0
                         sm:transition-opacity
                         sm:duration-300
@@ -67,18 +69,23 @@ export default function SoulActionBubble({
                     {label && (
                         <span
                             className="
+                                max-w-[calc(100vw-2rem)]
+                                truncate
                                 rounded-full
                                 border
                                 border-white/15
-                                bg-black/80
-                                px-3
-                                py-1.5
-                                text-xs
+                                bg-black/85
+                                px-2.5
+                                py-1
+                                text-[10px]
                                 font-medium
                                 tracking-wide
                                 text-white
                                 shadow-[0_8px_30px_rgba(0,0,0,0.35)]
                                 backdrop-blur-md
+                                sm:px-3
+                                sm:py-1.5
+                                sm:text-xs
                             "
                         >
                             {label}
@@ -89,11 +96,14 @@ export default function SoulActionBubble({
                         <span
                             className="
                                 mt-1
-                                max-w-40
+                                w-max
+                                max-w-[min(11rem,calc(100vw-2rem))]
                                 text-center
-                                text-[11px]
-                                leading-4
-                                text-white/65
+                                text-[9px]
+                                leading-3.5
+                                text-white/60
+                                sm:text-[11px]
+                                sm:leading-4
                             "
                         >
                             {description}
@@ -103,7 +113,6 @@ export default function SoulActionBubble({
             )}
 
             {/* ACTION BUTTON */}
-
             <button
                 type="button"
                 onClick={onClick}
@@ -111,6 +120,7 @@ export default function SoulActionBubble({
                 className="
                     relative
                     z-20
+                    block
                     size-full
                     rounded-full
                     outline-none
@@ -118,7 +128,7 @@ export default function SoulActionBubble({
                     duration-300
                     ease-out
                     hover:scale-[1.04]
-                    active:scale-[0.97]
+                    active:scale-[0.96]
                     focus-visible:ring-2
                     focus-visible:ring-white/40
                 "
@@ -126,16 +136,15 @@ export default function SoulActionBubble({
                 <SoulBubble size={size} />
 
                 {/* ONLINE STATUS */}
-
                 {isOnline && (
                     <span
                         aria-label="Signed in"
                         className="
                             absolute
-                            right-[6%]
-                            top-[6%]
+                            right-[5%]
+                            top-[5%]
                             z-40
-                            size-3
+                            size-[clamp(0.5rem,2vw,0.75rem)]
                             rounded-full
                             bg-emerald-400
                             ring-2
