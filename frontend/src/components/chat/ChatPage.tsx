@@ -375,7 +375,7 @@ export default function ChatPage({
     // ============================================================
 
     return (
-        <main className="relative flex h-[100dvh] w-full min-w-0 overflow-hidden bg-black text-white">
+        <main className="fixed inset-0 flex h-[100dvh] w-full min-w-0 overflow-hidden bg-black text-white">
             <SoulBackground />
 
             {/* ============================================================

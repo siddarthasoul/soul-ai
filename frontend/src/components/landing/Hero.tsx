@@ -122,7 +122,7 @@ export default function Hero() {
     };
 
     return (
-        <section className="fixed inset-0 h-[100dvh] w-full overflow-hidden bg-black">
+        <section className="fixed inset-0 z-0 h-[100dvh] w-full overflow-hidden bg-black">
             {/* BACKGROUND */}
 
             <div className="pointer-events-none absolute inset-0 overflow-hidden">

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import Navbar from "@/src/components/landing/Navbar";
-import SoulBackground from "@/src/components/landing/SoulBackground";
 import PageTransition from "@/src/components/ui/PageTransition";
 
 import "./globals.css";
@@ -18,16 +17,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className="relative min-h-screen bg-black text-white">
-                <SoulBackground />
+            <body className="bg-black text-white">
+                <Navbar />
 
-                <div className="relative z-10 min-h-screen">
-                    <Navbar />
-
-                    <PageTransition>
-                        {children}
-                    </PageTransition>
-                </div>
+                <PageTransition>
+                    {children}
+                </PageTransition>
             </body>
         </html>
     );
