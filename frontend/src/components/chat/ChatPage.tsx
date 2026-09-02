@@ -183,36 +183,21 @@ export default function ChatPage({
             setIsJoined(false);
         };
 
-        socket.on(
-            "connect",
-            handleConnect
-        );
+        socket.on("connect", handleConnect);
+        socket.on("disconnect", handleDisconnect);
+        socket.on("connect_error", handleConnectError);
 
-        socket.on(
-            "disconnect",
-            handleDisconnect
-        );
-
-        socket.on(
-            "connect_error",
-            handleConnectError
-        );
+        // IMPORTANT:
+        // connect() may return an already-connected socket.
+        // In that case the "connect" event has already fired.
+        if (socket.connected) {
+            handleConnect();
+        }
 
         return () => {
-            socket.off(
-                "connect",
-                handleConnect
-            );
-
-            socket.off(
-                "disconnect",
-                handleDisconnect
-            );
-
-            socket.off(
-                "connect_error",
-                handleConnectError
-            );
+            socket.off("connect", handleConnect);
+            socket.off("disconnect", handleDisconnect);
+            socket.off("connect_error", handleConnectError);
         };
     }, [connect]);
 
