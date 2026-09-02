@@ -220,14 +220,14 @@ export default function Hero() {
                                 ? "..."
                                 : isLoggedIn
                                     ? userLabel
-                                    : "Unlimited"
+                                    : "Connect"
                         }
                         description={
                             authLoading
                                 ? "Checking account"
                                 : isLoggedIn
-                                    ? "Unlimited chat"
-                                    : "Unlock unlimited chat"
+                                    ? "Stay connected"
+                                    : "Create your SOUL account"
                         }
                         onClick={
                             authLoading

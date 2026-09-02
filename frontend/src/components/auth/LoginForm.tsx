@@ -45,6 +45,7 @@ export default function LoginForm() {
                     response.message ??
                         "Unable to send verification code.",
                 );
+
                 return;
             }
 
@@ -112,12 +113,10 @@ export default function LoginForm() {
                         backdrop-blur-xl
                         transition-all
                         duration-300
-
                         focus:border-cyan-300/30
                         focus:bg-white/[0.055]
                         focus:ring-1
                         focus:ring-cyan-300/10
-
                         disabled:cursor-not-allowed
                         disabled:opacity-40
                     "
@@ -154,6 +153,28 @@ export default function LoginForm() {
                 >
                     Continue
                 </Button>
+            </div>
+
+            {/* Register */}
+            <div className="flex items-center justify-center gap-1.5 text-xs">
+                <span className="text-white/35">
+                    Don&apos;t have a SOUL account?
+                </span>
+
+                <button
+                    type="button"
+                    onClick={() => router.push("/register")}
+                    disabled={isLoading}
+                    className="
+                        text-cyan-300/80
+                        transition-colors
+                        hover:text-cyan-200
+                        disabled:cursor-not-allowed
+                        disabled:opacity-40
+                    "
+                >
+                    Create one
+                </button>
             </div>
         </form>
     );

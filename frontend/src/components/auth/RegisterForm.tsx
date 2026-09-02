@@ -1,8 +1,8 @@
 "use client";
 
 import {
-FormEvent,
-useState,
+    FormEvent,
+    useState,
 } from "react";
 
 import { useRouter } from "next/navigation";
@@ -12,80 +12,80 @@ import useUser from "@/src/hooks/useUser";
 import Button from "@/src/components/ui/Button";
 
 export default function RegisterForm() {
-const router = useRouter();
+    const router = useRouter();
 
 
-const { createUser } = useUser();
+    const { createUser } = useUser();
 
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [dob, setDob] = useState("");
-const [error, setError] = useState("");
-const [loading, setLoading] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [dob, setDob] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>,
-) => {
-    event.preventDefault();
+    const handleSubmit = async (
+        event: FormEvent<HTMLFormElement>,
+    ) => {
+        event.preventDefault();
 
-    setError("");
+        setError("");
 
-    if (!name.trim()) {
-        setError("Name is required.");
-        return;
-    }
-
-    if (!email.trim()) {
-        setError("Email is required.");
-        return;
-    }
-
-    if (!dob) {
-        setError("Date of birth is required.");
-        return;
-    }
-
-    try {
-        setLoading(true);
-
-        const normalizedEmail =
-            email.trim().toLowerCase();
-
-        const response = await createUser({
-            name: name.trim(),
-            email: normalizedEmail,
-            dob,
-        });
-
-        if (!response.success) {
-            setError(
-                response.message ??
-                    "Unable to create account.",
-            );
-
+        if (!name.trim()) {
+            setError("Name is required.");
             return;
         }
 
-        router.push(
-            `/verify?email=${encodeURIComponent(
-                normalizedEmail,
-            )}`,
-        );
-    } catch (error) {
-        setError(
-            error instanceof Error
-                ? error.message
-                : "Something went wrong.",
-        );
-    } finally {
-        setLoading(false);
-    }
-};
+        if (!email.trim()) {
+            setError("Email is required.");
+            return;
+        }
 
-return (
-    <form
-        onSubmit={handleSubmit}
-        className="
+        if (!dob) {
+            setError("Date of birth is required.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            const normalizedEmail =
+                email.trim().toLowerCase();
+
+            const response = await createUser({
+                name: name.trim(),
+                email: normalizedEmail,
+                dob,
+            });
+
+            if (!response.success) {
+                setError(
+                    response.message ??
+                    "Unable to create account.",
+                );
+
+                return;
+            }
+
+            router.push(
+                `/verify?email=${encodeURIComponent(
+                    normalizedEmail,
+                )}`,
+            );
+        } catch (error) {
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : "Something went wrong.",
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <form
+            onSubmit={handleSubmit}
+            className="
             flex
             w-full
             min-w-0
@@ -94,10 +94,10 @@ return (
 
             sm:gap-3.5
         "
-    >
-        {/* Name */}
-        <div
-            className="
+        >
+            {/* Name */}
+            <div
+                className="
                 flex
                 min-w-0
                 flex-col
@@ -105,32 +105,32 @@ return (
 
                 sm:gap-1.5
             "
-        >
-            <label
-                htmlFor="name"
-                className="
+            >
+                <label
+                    htmlFor="name"
+                    className="
                     text-[10px]
                     font-medium
                     text-white/60
 
                     sm:text-xs
                 "
-            >
-                Name
-            </label>
+                >
+                    Name
+                </label>
 
-            <input
-                id="name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                value={name}
-                onChange={(event) =>
-                    setName(event.target.value)
-                }
-                placeholder="Your name"
-                disabled={loading}
-                className="
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    value={name}
+                    onChange={(event) =>
+                        setName(event.target.value)
+                    }
+                    placeholder="Your name"
+                    disabled={loading}
+                    className="
                     box-border
                     h-8
                     w-full
@@ -159,12 +159,12 @@ return (
                     sm:px-3.5
                     sm:text-sm
                 "
-            />
-        </div>
+                />
+            </div>
 
-        {/* Email */}
-        <div
-            className="
+            {/* Email */}
+            <div
+                className="
                 flex
                 min-w-0
                 flex-col
@@ -172,32 +172,32 @@ return (
 
                 sm:gap-1.5
             "
-        >
-            <label
-                htmlFor="email"
-                className="
+            >
+                <label
+                    htmlFor="email"
+                    className="
                     text-[10px]
                     font-medium
                     text-white/60
 
                     sm:text-xs
                 "
-            >
-                Email
-            </label>
+                >
+                    Email
+                </label>
 
-            <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(event) =>
-                    setEmail(event.target.value)
-                }
-                placeholder="you@example.com"
-                disabled={loading}
-                className="
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(event) =>
+                        setEmail(event.target.value)
+                    }
+                    placeholder="you@example.com"
+                    disabled={loading}
+                    className="
                     box-border
                     h-8
                     w-full
@@ -226,12 +226,12 @@ return (
                     sm:px-3.5
                     sm:text-sm
                 "
-            />
-        </div>
+                />
+            </div>
 
-        {/* Date of birth */}
-        <div
-            className="
+            {/* Date of birth */}
+            <div
+                className="
                 flex
                 min-w-0
                 flex-col
@@ -239,30 +239,30 @@ return (
 
                 sm:gap-1.5
             "
-        >
-            <label
-                htmlFor="dob"
-                className="
+            >
+                <label
+                    htmlFor="dob"
+                    className="
                     text-[10px]
                     font-medium
                     text-white/60
 
                     sm:text-xs
                 "
-            >
-                Date of birth
-            </label>
+                >
+                    Date of birth
+                </label>
 
-            <input
-                id="dob"
-                name="dob"
-                type="date"
-                value={dob}
-                onChange={(event) =>
-                    setDob(event.target.value)
-                }
-                disabled={loading}
-                className="
+                <input
+                    id="dob"
+                    name="dob"
+                    type="date"
+                    value={dob}
+                    onChange={(event) =>
+                        setDob(event.target.value)
+                    }
+                    disabled={loading}
+                    className="
                     box-border
                     h-8
                     w-full
@@ -290,14 +290,14 @@ return (
                     sm:px-3.5
                     sm:text-sm
                 "
-            />
-        </div>
+                />
+            </div>
 
-        {/* Error */}
-        {error && (
-            <p
-                role="alert"
-                className="
+            {/* Error */}
+            {error && (
+                <p
+                    role="alert"
+                    className="
                     w-full
                     min-w-0
                     max-w-full
@@ -317,36 +317,60 @@ return (
                     sm:text-xs
                     sm:leading-5
                 "
-            >
-                {error}
-            </p>
-        )}
+                >
+                    {error}
+                </p>
+            )}
 
-        {/* Continue */}
-        <div
-            className="
+
+            {/* Continue */}
+            <div
+                className="
                 flex
                 w-full
                 min-w-0
                 justify-center
                 pt-0.5
-
                 sm:pt-1
             "
-        >
-            <Button
-                type="submit"
-                variant="glass"
-                size="md"
-                loading={loading}
-                className="
+            >
+                <Button
+                    type="submit"
+                    variant="glass"
+                    size="md"
+                    loading={loading}
+                    className="
                     max-w-full
                     shrink
                 "
-            >
-                Continue
-            </Button>
-        </div>
-    </form>
-);
-        }
+                >
+                    Continue
+                </Button>
+            </div>
+
+            {/* Login */}
+            <div className="flex items-center justify-center gap-1.5 text-xs">
+                <span className="text-white/35">
+                    Already have a SOUL account?
+                </span>
+
+                <button
+                    type="button"
+                    onClick={() => router.push("/login")}
+                    disabled={loading}
+                    className="
+                    text-cyan-300/80
+                    transition-colors
+                    hover:text-cyan-200
+                    disabled:cursor-not-allowed
+                    disabled:opacity-40
+                "
+                >
+                    Sign in
+                </button>
+            </div>
+
+
+        </form>
+    );
+}
