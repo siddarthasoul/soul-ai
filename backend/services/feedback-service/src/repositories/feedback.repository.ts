@@ -1,4 +1,3 @@
-
 import FeedbackModel, {
     type FeedbackDocument,
 } from "../models/feedback.model.js";
@@ -12,7 +11,8 @@ import type {
 
 export interface CreateFeedbackRepositoryInput
     extends CreateFeedbackInput {
-    userId: string;
+    userId?: string | null;
+    guestId?: string | null;
     overall: number;
 }
 
@@ -32,14 +32,13 @@ class FeedbackRepository {
     async findById(
         feedbackId: string
     ): Promise<FeedbackDocument | null> {
-        return FeedbackModel.findById(feedbackId);
+        return FeedbackModel.findById(
+            feedbackId
+        ).exec();
     }
 
     /**
      * Find feedback by ID and user.
-     *
-     * Useful for ensuring a user can only access
-     * their own feedback.
      */
     async findByIdForUser(
         feedbackId: string,
@@ -48,7 +47,20 @@ class FeedbackRepository {
         return FeedbackModel.findOne({
             _id: feedbackId,
             userId,
-        });
+        }).exec();
+    }
+
+    /**
+     * Find feedback by ID and guest.
+     */
+    async findByIdForGuest(
+        feedbackId: string,
+        guestId: string
+    ): Promise<FeedbackDocument | null> {
+        return FeedbackModel.findOne({
+            _id: feedbackId,
+            guestId,
+        }).exec();
     }
 
     /**
@@ -65,13 +77,20 @@ class FeedbackRepository {
     }
 
     /**
+     * Get all feedback submitted by a guest.
+     */
+    async findByGuestId(
+        guestId: string
+    ): Promise<FeedbackDocument[]> {
+        return FeedbackModel.find({
+            guestId,
+        })
+            .sort({ createdAt: -1 })
+            .exec();
+    }
+
+    /**
      * Find feedback by type.
-     *
-     * Example:
-     * - ai
-     * - ui
-     * - bug
-     * - feature
      */
     async findByType(
         type: FeedbackType
@@ -83,7 +102,9 @@ class FeedbackRepository {
             .exec();
     }
 
-
+    /**
+     * Delete feedback by ID.
+     */
     async deleteById(
         feedbackId: string
     ): Promise<FeedbackDocument | null> {
@@ -93,7 +114,7 @@ class FeedbackRepository {
     }
 
     /**
-     * Delete feedback belonging to a specific user.
+     * Delete feedback belonging to a user.
      */
     async deleteByIdForUser(
         feedbackId: string,
@@ -106,9 +127,20 @@ class FeedbackRepository {
     }
 
     /**
+     * Delete feedback belonging to a guest.
+     */
+    async deleteByIdForGuest(
+        feedbackId: string,
+        guestId: string
+    ): Promise<FeedbackDocument | null> {
+        return FeedbackModel.findOneAndDelete({
+            _id: feedbackId,
+            guestId,
+        }).exec();
+    }
+
+    /**
      * Update feedback status.
-     *
-     * Admin operation.
      */
     async updateStatus(
         feedbackId: string,
@@ -130,8 +162,6 @@ class FeedbackRepository {
 
     /**
      * Update feedback priority.
-     *
-     * Admin operation.
      */
     async updatePriority(
         feedbackId: string,
@@ -172,7 +202,6 @@ class FeedbackRepository {
         ).exec();
     }
 
-
     async count(): Promise<number> {
         return FeedbackModel.countDocuments().exec();
     }
@@ -181,25 +210,26 @@ class FeedbackRepository {
      * Get average overall rating.
      */
     async getAverageOverall(): Promise<number | null> {
-        const result = await FeedbackModel.aggregate<{
-            average: number;
-        }>([
-            {
-                $match: {
-                    overall: {
-                        $exists: true,
+        const result =
+            await FeedbackModel.aggregate<{
+                average: number;
+            }>([
+                {
+                    $match: {
+                        overall: {
+                            $exists: true,
+                        },
                     },
                 },
-            },
-            {
-                $group: {
-                    _id: null,
-                    average: {
-                        $avg: "$overall",
+                {
+                    $group: {
+                        _id: null,
+                        average: {
+                            $avg: "$overall",
+                        },
                     },
                 },
-            },
-        ]);
+            ]);
 
         if (result.length === 0) {
             return null;
@@ -240,89 +270,90 @@ class FeedbackRepository {
      * Get average ratings for product analytics.
      */
     async getRatingAnalytics() {
-        const result = await FeedbackModel.aggregate([
-            {
-                $group: {
-                    _id: null,
+        const result =
+            await FeedbackModel.aggregate([
+                {
+                    $group: {
+                        _id: null,
 
-                    overall: {
-                        $avg: "$overall",
-                    },
+                        overall: {
+                            $avg: "$overall",
+                        },
 
-                    accuracy: {
-                        $avg: "$ratings.accuracy",
-                    },
+                        accuracy: {
+                            $avg: "$ratings.accuracy",
+                        },
 
-                    relevance: {
-                        $avg: "$ratings.relevance",
-                    },
+                        relevance: {
+                            $avg: "$ratings.relevance",
+                        },
 
-                    clarity: {
-                        $avg: "$ratings.clarity",
-                    },
+                        clarity: {
+                            $avg: "$ratings.clarity",
+                        },
 
-                    completeness: {
-                        $avg: "$ratings.completeness",
-                    },
+                        completeness: {
+                            $avg: "$ratings.completeness",
+                        },
 
-                    reasoning: {
-                        $avg: "$ratings.reasoning",
-                    },
+                        reasoning: {
+                            $avg: "$ratings.reasoning",
+                        },
 
-                    formatting: {
-                        $avg: "$ratings.formatting",
-                    },
+                        formatting: {
+                            $avg: "$ratings.formatting",
+                        },
 
-                    speed: {
-                        $avg: "$ratings.speed",
-                    },
+                        speed: {
+                            $avg: "$ratings.speed",
+                        },
 
-                    conversationFlow: {
-                        $avg: "$ratings.conversationFlow",
-                    },
+                        conversationFlow: {
+                            $avg: "$ratings.conversationFlow",
+                        },
 
-                    memory: {
-                        $avg: "$ratings.memory",
-                    },
+                        memory: {
+                            $avg: "$ratings.memory",
+                        },
 
-                    streaming: {
-                        $avg: "$ratings.streaming",
-                    },
+                        streaming: {
+                            $avg: "$ratings.streaming",
+                        },
 
-                    composer: {
-                        $avg: "$ratings.composer",
-                    },
+                        composer: {
+                            $avg: "$ratings.composer",
+                        },
 
-                    design: {
-                        $avg: "$ratings.design",
-                    },
+                        design: {
+                            $avg: "$ratings.design",
+                        },
 
-                    navigation: {
-                        $avg: "$ratings.navigation",
-                    },
+                        navigation: {
+                            $avg: "$ratings.navigation",
+                        },
 
-                    easeOfUse: {
-                        $avg: "$ratings.easeOfUse",
-                    },
+                        easeOfUse: {
+                            $avg: "$ratings.easeOfUse",
+                        },
 
-                    responsiveness: {
-                        $avg: "$ratings.responsiveness",
-                    },
+                        responsiveness: {
+                            $avg: "$ratings.responsiveness",
+                        },
 
-                    animations: {
-                        $avg: "$ratings.animations",
-                    },
+                        animations: {
+                            $avg: "$ratings.animations",
+                        },
 
-                    pageLoading: {
-                        $avg: "$ratings.pageLoading",
-                    },
+                        pageLoading: {
+                            $avg: "$ratings.pageLoading",
+                        },
 
-                    stability: {
-                        $avg: "$ratings.stability",
+                        stability: {
+                            $avg: "$ratings.stability",
+                        },
                     },
                 },
-            },
-        ]);
+            ]);
 
         return result[0] ?? null;
     }

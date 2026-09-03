@@ -82,7 +82,7 @@ class LLMService {
                     model: this.model,
                     messages: finalMessages,
                     stream: true,
-                    think: false,
+                    think: true,
                 });
         } catch (error) {
             logger.error(

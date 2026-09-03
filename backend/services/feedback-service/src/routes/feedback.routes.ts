@@ -29,7 +29,7 @@ const router = Router();
 router.post(
     "/",
     identityMiddleware,
-    requireAuthMiddleware,
+    // requireAuthMiddleware,
     validate({body: createFeedbackSchema}),
     feedbackController.createFeedback
 );
@@ -42,7 +42,7 @@ router.post(
 router.get(
     "/me",
     identityMiddleware,
-    requireAuthMiddleware,
+    // requireAuthMiddleware,
     feedbackController.getMyFeedback
 );
 
@@ -54,22 +54,10 @@ router.get(
 router.get(
     "/:feedbackId",
     identityMiddleware,
-    requireAuthMiddleware,
+    // requireAuthMiddleware,
     validate({body :feedbackIdParamsSchema}),
     feedbackController.getFeedbackById
 );
 
-/**
- * DELETE /feedback/:feedbackId
- *
- * Delete feedback belonging to current user.
- */
-router.delete(
-    "/:feedbackId",
-    identityMiddleware,
-    requireAuthMiddleware,
-    validate({body: feedbackIdParamsSchema}),
-    feedbackController.deleteMyFeedback
-);
 
 export default router;

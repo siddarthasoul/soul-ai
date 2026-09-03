@@ -1,8 +1,10 @@
-
 "use client";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 
 interface MessageContentProps {
     content: string;
@@ -14,7 +16,8 @@ export default function MessageContent({
     return (
         <div className="soul-markdown">
             <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
                 components={{
                     h1: ({ children }) => (
                         <h1 className="mb-5 mt-2 text-2xl font-semibold text-white">
@@ -92,9 +95,7 @@ export default function MessageContent({
                         ...props
                     }) => {
                         const isBlock =
-                            className?.includes(
-                                "language-"
-                            );
+                            className?.includes("language-");
 
                         if (isBlock) {
                             return (
@@ -120,15 +121,15 @@ export default function MessageContent({
                     pre: ({ children }) => (
                         <pre
                             className="
-        soul-code-scroll
-        my-5
-        overflow-x-auto
-        rounded-2xl
-        border
-        border-white/10
-        bg-black/50
-        p-1
-    "
+                                soul-code-scroll
+                                my-5
+                                overflow-x-auto
+                                rounded-2xl
+                                border
+                                border-white/10
+                                bg-black/50
+                                p-1
+                            "
                         >
                             {children}
                         </pre>

@@ -18,24 +18,26 @@ import {
 import feedbackService from "../services/feedback.service.js";
 
 /**
- * Get authenticated user ID.
+ * Get request identity.
  *
- * Authentication is provided by identityMiddleware
- * through req.identity.userId.
+ * Identity is provided by identityMiddleware
+ * through req.identity.
  */
-const getUserId = (
-    req: Request
-): string => {
+const getIdentity = (req: Request) => {
     const userId = req.identity?.userId;
+    const guestId = req.identity?.guestId;
 
-    if (!userId) {
+    if (!userId && !guestId) {
         throw new ApiError(
             401,
-            "Authentication required"
+            "Identity required"
         );
     }
 
-    return userId;
+    return {
+        userId,
+        guestId,
+    };
 };
 
 /**
@@ -58,7 +60,16 @@ const getFeedbackId = (
         );
     }
 
-    return value.trim();
+    const feedbackId = value.trim();
+
+    if (!feedbackId) {
+        throw new ApiError(
+            400,
+            "Feedback ID is required"
+        );
+    }
+
+    return feedbackId;
 };
 
 class FeedbackController {
@@ -73,12 +84,12 @@ class FeedbackController {
             req: Request,
             res: Response
         ) => {
-            const userId =
-                getUserId(req);
+            const identity =
+                getIdentity(req);
 
             const result =
                 await feedbackService.createFeedback(
-                    userId,
+                    identity,
                     req.body
                 );
 
@@ -94,19 +105,19 @@ class FeedbackController {
      * GET /feedback/me
      *
      * Get feedback submitted by
-     * the authenticated user.
+     * the current identity.
      */
     getMyFeedback = asyncHandler(
         async (
             req: Request,
             res: Response
         ) => {
-            const userId =
-                getUserId(req);
+            const identity =
+                getIdentity(req);
 
             const feedback =
                 await feedbackService.getMyFeedback(
-                    userId
+                    identity
                 );
 
             return ApiResponse.success(
@@ -120,16 +131,16 @@ class FeedbackController {
     /**
      * GET /feedback/:feedbackId
      *
-     * Get one feedback belonging
-     * to the authenticated user.
+     * Get feedback belonging to
+     * the current identity.
      */
     getFeedbackById = asyncHandler(
         async (
             req: Request,
             res: Response
         ) => {
-            const userId =
-                getUserId(req);
+            const identity =
+                getIdentity(req);
 
             const feedbackId =
                 getFeedbackId(
@@ -139,7 +150,7 @@ class FeedbackController {
             const feedback =
                 await feedbackService.getFeedbackById(
                     feedbackId,
-                    userId
+                    identity
                 );
 
             return ApiResponse.success(
@@ -147,34 +158,6 @@ class FeedbackController {
                 feedback,
                 "Feedback retrieved successfully"
             );
-        }
-    );
-
-    /**
-     * DELETE /feedback/:feedbackId
-     *
-     * Delete feedback belonging
-     * to the authenticated user.
-     */
-    deleteMyFeedback = asyncHandler(
-        async (
-            req: Request,
-            res: Response
-        ) => {
-            const userId =
-                getUserId(req);
-
-            const feedbackId =
-                getFeedbackId(
-                    req.params.feedbackId
-                );
-
-            await feedbackService.deleteMyFeedback(
-                feedbackId,
-                userId
-            );
-
-            return ApiResponse.noContent(res);
         }
     );
 }

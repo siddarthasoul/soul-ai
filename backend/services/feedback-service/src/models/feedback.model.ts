@@ -193,6 +193,12 @@ const feedbackSchema = new Schema(
             index: true,
         },
 
+        guestId: {
+            type: String,
+            default: null,
+            index: true,
+        },
+
         type: {
             type: String,
             enum: [

@@ -163,11 +163,11 @@ export function useFeedback(
         async (
             data: CreateFeedbackInput
         ): Promise<FeedbackResult | null> => {
-            if (!isAuthenticated) {
-                throw new Error(
-                    "Please login and verify your account before submitting feedback."
-                );
-            }
+            // if (!isAuthenticated) {
+            //     throw new Error(
+            //         "Please login and verify your account before submitting feedback."
+            //     );
+            // }
 
             /*
              * Never send another request while the client

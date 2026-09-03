@@ -104,7 +104,9 @@ export interface FeedbackMetadata {
 export interface Feedback {
     _id: Types.ObjectId;
 
-    userId?: Types.ObjectId;
+    userId?: Types.ObjectId | null;
+
+    guestId?: string | null;
 
     type: FeedbackType;
 

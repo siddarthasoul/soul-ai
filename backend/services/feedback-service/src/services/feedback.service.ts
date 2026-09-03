@@ -1,20 +1,38 @@
 import { ApiError } from "../../../../packages/common/utils/apiError.js";
+
 import logger from "../../../../packages/common/utils/logger.js";
+
 import feedbackProtectionService from "../../../../packages/common/redis/feedbackProtection.service.js";
+
 import feedbackRepository from "../repositories/feedback.repository.js";
 
 import type {
     CreateFeedbackInput,
 } from "../types/feedback.types.js";
 
+export interface FeedbackIdentity {
+    userId?: string | undefined;
+    guestId?: string | undefined;
+}
+
 class FeedbackService {
+
     /**
      * Create feedback
      */
     async createFeedback(
-        userId: string,
+        identity: FeedbackIdentity,
         data: CreateFeedbackInput
     ) {
+        const { userId, guestId } = identity;
+
+        if (!userId && !guestId) {
+            throw new ApiError(
+                401,
+                "Identity required"
+            );
+        }
+
         const ratingValues = Object.values(
             data.ratings
         ).filter(
@@ -38,28 +56,44 @@ class FeedbackService {
             (total / ratingValues.length).toFixed(2)
         );
 
-        // Check protection only after
-        // the request has passed validation.
+        /**
+         * Use the identity as the protection key.
+         * User and guest identities are kept separate.
+         */
+        const protectionKey =
+            userId || guestId;
+
+        if (!protectionKey) {
+            throw new ApiError(
+                401,
+                "Identity required"
+            );
+        }
+
         await feedbackProtectionService.checkRequest(
-            userId
+            protectionKey
         );
 
         const feedback =
             await feedbackRepository.create({
                 ...data,
-                userId,
+                userId: userId ?? null,
+                guestId: guestId ?? null,
                 overall,
             });
 
         logger.info("Feedback created", {
-            feedbackId: feedback._id.toString(),
+            feedbackId:
+                feedback._id.toString(),
             userId,
+            guestId,
             type: feedback.type,
             overall: feedback.overall,
         });
 
         return {
-            feedbackId: feedback._id.toString(),
+            feedbackId:
+                feedback._id.toString(),
             overall: feedback.overall,
             message:
                 "Your feedback helps us make Soul better.",
@@ -67,41 +101,56 @@ class FeedbackService {
     }
 
     /**
-     * Get current user's feedback
+     * Get current identity's feedback
      */
     async getMyFeedback(
-        userId: string | undefined
+        identity: FeedbackIdentity
     ) {
-        if (!userId) {
+        const { userId, guestId } = identity;
+
+        if (!userId && !guestId) {
             throw new ApiError(
                 401,
-                "Authentication required"
+                "Identity required"
             );
         }
 
-        return feedbackRepository.findByUserId(
-            userId
+        if (userId) {
+            return feedbackRepository.findByUserId(
+                userId
+            );
+        }
+
+        return feedbackRepository.findByGuestId(
+            guestId!
         );
     }
 
     /**
-     * Get one feedback belonging to current user
+     * Get one feedback belonging
+     * to current identity
      */
     async getFeedbackById(
         feedbackId: string,
-        userId: string | undefined
+        identity: FeedbackIdentity
     ) {
-        if (!userId) {
+        const { userId, guestId } = identity;
+
+        if (!userId && !guestId) {
             throw new ApiError(
                 401,
-                "Authentication required"
+                "Identity required"
             );
         }
 
-        const feedback =
-            await feedbackRepository.findByIdForUser(
+        const feedback = userId
+            ? await feedbackRepository.findByIdForUser(
                 feedbackId,
                 userId
+            )
+            : await feedbackRepository.findByIdForGuest(
+                feedbackId,
+                guestId!
             );
 
         if (!feedback) {
@@ -115,23 +164,29 @@ class FeedbackService {
     }
 
     /**
-     * Delete user's feedback
+     * Delete current identity's feedback
      */
     async deleteMyFeedback(
         feedbackId: string,
-        userId: string | undefined
+        identity: FeedbackIdentity
     ) {
-        if (!userId) {
+        const { userId, guestId } = identity;
+
+        if (!userId && !guestId) {
             throw new ApiError(
                 401,
-                "Authentication required"
+                "Identity required"
             );
         }
 
-        const feedback =
-            await feedbackRepository.deleteByIdForUser(
+        const feedback = userId
+            ? await feedbackRepository.deleteByIdForUser(
                 feedbackId,
                 userId
+            )
+            : await feedbackRepository.deleteByIdForGuest(
+                feedbackId,
+                guestId!
             );
 
         if (!feedback) {
@@ -146,6 +201,7 @@ class FeedbackService {
             {
                 feedbackId,
                 userId,
+                guestId,
             }
         );
     }

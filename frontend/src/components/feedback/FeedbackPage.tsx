@@ -40,15 +40,15 @@ export default function FeedbackPage() {
      * ------------------------------------------------------------
      */
 
+
     useEffect(() => {
         let mounted = true;
 
         const checkAuth = async () => {
             try {
-                const response =
-                    await apiClient.get(
-                        "/api/v1/users/me"
-                    );
+                const response = await apiClient.get(
+                    "/api/v1/users/me"
+                );
 
                 const currentUser =
                     response.data?.data;
@@ -67,8 +67,10 @@ export default function FeedbackPage() {
                     setUser(null);
                 }
             } catch {
+                // Not authenticated = guest user.
+                // This is not an error for the feedback page.
                 console.log(
-                    "[FeedbackPage] User is not authenticated"
+                    "[FeedbackPage] Continuing as guest"
                 );
 
                 if (mounted) {
@@ -87,6 +89,7 @@ export default function FeedbackPage() {
             mounted = false;
         };
     }, []);
+
 
     /*
      * ------------------------------------------------------------
@@ -130,107 +133,6 @@ export default function FeedbackPage() {
      * ------------------------------------------------------------
      */
 
-    if (!user) {
-        return (
-            <main className="relative min-h-dvh w-full px-4 pb-16 pt-24 sm:px-6 sm:pt-28">
-                <div className="mx-auto w-full max-w-3xl">
-
-                    <div className="mb-10 text-center">
-                        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-cyan-200/40">
-                            SOUL FEEDBACK
-                        </p>
-
-                        <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                            Help us make SOUL better
-                        </h1>
-
-                        <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-white/45 sm:text-base">
-                            Your feedback helps us improve
-                            SOUL and create a better
-                            experience for everyone.
-                        </p>
-                    </div>
-
-                    <div className="mx-auto w-full max-w-2xl rounded-3xl border border-white/[0.08] bg-white/[0.025] p-6 text-center backdrop-blur-xl sm:p-8">
-
-                        <div className="mx-auto mb-5 flex size-12 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.04]">
-                            <span className="text-xl">
-                                ✦
-                            </span>
-                        </div>
-
-                        <h2 className="text-lg font-medium text-white">
-                            Verify yourself first
-                        </h2>
-
-                        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-white/40">
-                            Please sign in or create an
-                            account before submitting
-                            feedback. This helps us connect
-                            your feedback to your SOUL
-                            account.
-                        </p>
-
-                        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
-
-                            <button
-                                type="button"
-                                onClick={openLogin}
-                                className="
-                                    h-11
-                                    rounded-2xl
-                                    border
-                                    border-white/[0.1]
-                                    bg-white/[0.04]
-                                    px-6
-                                    text-sm
-                                    font-medium
-                                    text-white
-                                    transition
-                                    hover:bg-white/[0.08]
-                                "
-                            >
-                                Sign in
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={openRegister}
-                                className="
-                                    h-11
-                                    rounded-2xl
-                                    bg-white
-                                    px-6
-                                    text-sm
-                                    font-medium
-                                    text-black
-                                    transition
-                                    hover:bg-white/90
-                                "
-                            >
-                                Create account
-                            </button>
-
-                        </div>
-
-                        <p className="mt-5 text-[11px] text-white/25">
-                            Already have an account?
-
-                            <button
-                                type="button"
-                                onClick={openLogin}
-                                className="ml-1 text-cyan-200/60 transition hover:text-cyan-200"
-                            >
-                                Sign in
-                            </button>
-                        </p>
-
-                    </div>
-                </div>
-            </main>
-        );
-    }
-
     /*
      * ------------------------------------------------------------
      * AUTHENTICATED
@@ -241,6 +143,7 @@ export default function FeedbackPage() {
         <main className="relative min-h-dvh w-full px-4 pb-16 pt-24 sm:px-6 sm:pt-28">
             <div className="mx-auto w-full max-w-3xl">
 
+                {/* HEADER */}
                 <div className="mb-10 text-center">
                     <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-cyan-200/40">
                         SOUL FEEDBACK
@@ -257,30 +160,96 @@ export default function FeedbackPage() {
                     </p>
                 </div>
 
-                <div className="mx-auto mb-5 flex w-full max-w-2xl items-center justify-between rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                {/* IDENTITY */}
+                {user ? (
+                    <div className="mx-auto mb-5 flex w-full max-w-2xl items-center justify-between rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
 
-                    <div className="min-w-0">
-                        <p className="text-[11px] uppercase tracking-wider text-white/25">
-                            Signed in as
-                        </p>
+                        <div className="min-w-0">
+                            <p className="text-[11px] uppercase tracking-wider text-white/25">
+                                Signed in as
+                            </p>
 
-                        <p className="mt-0.5 truncate text-sm text-white/65">
-                            {user.name ||
-                                user.email ||
-                                "SOUL user"}
-                        </p>
+                            <p className="mt-0.5 truncate text-sm text-white/65">
+                                {user.name ||
+                                    user.email ||
+                                    "SOUL user"}
+                            </p>
+                        </div>
+
+                        <div className="ml-4 flex shrink-0 items-center gap-2">
+                            <span className="size-2 rounded-full bg-emerald-400" />
+
+                            <span className="text-xs text-white/35">
+                                Verified
+                            </span>
+                        </div>
+
                     </div>
+                ) : (
+                    <div className="mx-auto mb-5 w-full max-w-2xl rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4">
 
-                    <div className="ml-4 flex shrink-0 items-center gap-2">
-                        <span className="size-2 rounded-full bg-emerald-400" />
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-                        <span className="text-xs text-white/35">
-                            Verified
-                        </span>
+                            <div className="min-w-0">
+                                <p className="text-sm font-medium text-white/70">
+                                    You're giving feedback as a guest
+                                </p>
+
+                                <p className="mt-1 text-xs leading-5 text-white/35">
+                                    You can submit feedback now, or
+                                    sign in to connect it with your
+                                    SOUL account.
+                                </p>
+                            </div>
+
+                            <div className="flex shrink-0 gap-2">
+
+                                <button
+                                    type="button"
+                                    onClick={openLogin}
+                                    className="
+                                    h-9
+                                    rounded-xl
+                                    border
+                                    border-white/[0.1]
+                                    bg-white/[0.04]
+                                    px-4
+                                    text-xs
+                                    font-medium
+                                    text-white/75
+                                    transition
+                                    hover:bg-white/[0.08]
+                                    hover:text-white
+                                "
+                                >
+                                    Sign in
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={openRegister}
+                                    className="
+                                    h-9
+                                    rounded-xl
+                                    bg-white
+                                    px-4
+                                    text-xs
+                                    font-medium
+                                    text-black
+                                    transition
+                                    hover:bg-white/90
+                                "
+                                >
+                                    Create account
+                                </button>
+
+                            </div>
+
+                        </div>
                     </div>
+                )}
 
-                </div>
-
+                {/* FEEDBACK FORM */}
                 <FeedbackForm
                     onSubmit={submitFeedback}
                     isSubmitting={isSubmitting}
@@ -291,4 +260,6 @@ export default function FeedbackPage() {
             </div>
         </main>
     );
+
+
 }
